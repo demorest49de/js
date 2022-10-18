@@ -1,4 +1,5 @@
 'use strict';
+
 // region primitives
 // const name = 'xiaomi 12t pro';
 // const quantity = 5;
@@ -75,14 +76,46 @@
 // console.log(': ',typeof (regExp));
 //endregion
 
-var one = 1;
-var one = 1;
-var one = 1;
-var one = 1;
-var one = 1;
+//region отличие var let const
+// var one = 1;
+// var one = 1;
+// var one = 1;
+// var one = 1;
+// var one = 1;
+//
+// let two = 2;
+// two = 'two';
+// const three = 3;
+//
+// console.log(': ', one, two, three);
+//endregion
 
-let two = 2;
-two = 'two'
-const three = 3;
+let test;
+// let test = JSON.stringify({a: 1, b: 2});
+// test = JSON.parse(test);
 
-console.log(': ',one, two, three);
+// let test = 30 + '';
+// test = null + '';
+
+// test = '5' * 2;
+// test = Number('5');
+// //унарный оператор
+// test = +'5';
+//
+// test = Boolean('5');
+
+//пустая строка
+//test = !!'0'; - true
+
+// test = !![1, 2];
+
+test = +true; //1
+test = +undefined; //NaN
+test = +null; //0
+test = +''; //0
+test = +'hi'; //NaN
+test = +'55cc';
+test = true + false;
+
+console.log('test: ', typeof (test));
+console.log('test: ', test);
