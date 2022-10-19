@@ -109,13 +109,13 @@ let test;
 
 // test = !![1, 2];
 
-test = +true; //1
-test = +undefined; //NaN
-test = +null; //0
-test = +''; //0
-test = +'hi'; //NaN
-test = +'55cc';
-test = true + false;
-
+// test = +true; //1
+// test = +undefined; //NaN
+// test = +null; //0
+// test = +''; //0
+// test = +'hi'; //NaN
+// test = +'55cc';
+// test = true + false;
+//
 console.log('test: ', typeof (test));
 console.log('test: ', test);
