@@ -6,7 +6,7 @@ const evaluateConversion = (euro, eurToUsd) => {
     return priceInRubles;
 };
 
-const userInput = +prompt('Введите стоимость покупки в евро:');
+let userInput = +prompt('Введите стоимость покупки в евро:');
 const eurUsdCrossCurs = 1.2;
-const result = evaluateConversion(userInput, (value) => value * eurUsdCrossCurs);
+let result = evaluateConversion(userInput, (value) => value * eurUsdCrossCurs);
 console.log('result: ', result);
