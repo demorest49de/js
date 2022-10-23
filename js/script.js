@@ -90,7 +90,7 @@
 // console.log(': ', one, two, three);
 //endregion
 
-let test;
+// let test;
 // let test = JSON.stringify({a: 1, b: 2});
 // test = JSON.parse(test);
 
@@ -117,5 +117,15 @@ let test;
 // test = +'55cc';
 // test = true + false;
 //
-console.log('test: ', typeof (test));
-console.log('test: ', test);
+// console.log('test: ', typeof (test));
+// console.log('test: ', test);
+
+let i = 0;
+for (; ;) {
+    i += 1;
+    if (i % 5) continue;
+
+    if (i > 10) break;
+
+    console.log(': ', i);
+}
