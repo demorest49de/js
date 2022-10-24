@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 const revert = (phrase) => {
 
     let reverted = '';
