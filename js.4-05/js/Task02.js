@@ -1,9 +1,16 @@
-const isPrime = (i = 0) => {
+const isPrime = (number = 0) => {
+    if (number === 1) return false;
 
-    return ((i % 2) && (i % 3) && (i % 5)) ? true : false;
+    for (let i = 2; i < number; i++) {
+        if (number % i === 0) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
-for (let i = 0; i < 100; i++) {
+for (let i = 1; i < 20; i++) {
 
     const result = isPrime(i);
     console.log(`result: ${i} - ${result}`);
