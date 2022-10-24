@@ -2,9 +2,11 @@ const revert = (phrase) => {
 
     let reverted = '';
     for (let i = phrase.length - 1; i >= 0; i--) {
-        reverted += phrase.charAt(i);
-        console.log(reverted);
+        reverted += phrase[i];
     }
+
+    return reverted;
 };
 
-revert('Привет мир');
+const result = revert('Привет мир');
+console.log('result: ', result);
