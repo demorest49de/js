@@ -120,12 +120,121 @@
 // console.log('test: ', typeof (test));
 // console.log('test: ', test);
 
-let i = 0;
-for (; ;) {
-    i += 1;
-    if (i % 5) continue;
+// let i = 0;
+// for (; ;) {
+//     i += 1;
+//     if (i % 5) continue;
+//
+//     if (i > 10) break;
+//
+//     console.log(': ', i);
+// }
 
-    if (i > 10) break;
+// const animals = ['mouse','dog','cat']
+// animals.length = 3
+// console.log(animals);
+//
+// animals[0] = 'fish'
+// console.log(animals);
 
-    console.log(': ', i);
-}
+// const animals = ['mouse', 'dog', 'cat'];
+// animals.push('parrot', 'monkey', 'monkey');//добавление в конец массива
+// animals.unshift('parrot2', 'monkey2');//добавление в начало массива
+// // animals.pop();//удаление элементов в конце
+// console.log(animals);
+// const fromTail = animals.pop();
+// console.log(fromTail);
+// const fromHead = animals.shift();//удаление в начале
+// console.log(fromHead);
+//
+//
+// console.log('Array.isArray(animals): ', Array.isArray(animals));
+//
+// const foo = function (){
+//     console.log(arguments);
+//     console.log(Array.isArray(arguments));
+// }
+//
+// foo(1,2,3,4,5);
+
+
+// const scientists = ['m', 'a', 't', 'c', 'd'];
+
+// const removed = scientists.splice(3, 0, 'perelstein', 'newton');//удаление из массива из определенного элемента
+// const removed = scientists.splice(0, scientists.length);//удаление из массива из определенного элемента
+// console.log(removed);
+// console.log('scientists: ', scientists);
+
+// console.log(': ', scientists.includes('a'));
+//
+// const numbers = [1, 2, 3, 4, 5, 7, 8, 9];
+//
+// // console.log(': ', numbers.join(`, `));// join очень удобен для вставки разделителя запятой
+// const removed = numbers.splice(0, numbers.length);
+//
+// for (let i = 0; i < 15; i++) {
+//     numbers[i] = Math.trunc(Math.random() * 200);
+// }
+// const scientists = ['m', 'a', 't', 'c', 'd'];
+// const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43];
+
+const sortArray = ([...arr]) => {
+    arr.sort((a, b) => a - b);
+
+    return arr;
+};
+//
+// //
+// // const [x, y, ...restOfIt] = numbers;
+// // console.log(': ', x, y, restOfIt);
+// //
+// // const newArray = restOfIt.slice(6);//взять все элементы начиная с 6-го
+// // console.log('newArray: ', newArray);
+// //
+// // const string = 'Hello world';
+// // const [a, b, ...restofstring] = string;
+// // console.log(': ',restofstring);
+//
+// const newNum = [1,2,3] // слияние массивов спред оператор можно использовать в средине
+//
+// const joined = [...numbers, ...scientists]// после равно спрэд оператор, до равно рест оператор
+// console.log(': ',joined);
+
+const scientists = ['m', 'a', 't', 'c', 'd'];
+const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43];
+
+
+// const cloneNumber = [...numbers];// копирование массива по значению
+//
+// const newClonedNumbers = numbers;// копирование по ссылке
+
+// console.log('cloneNumber == numbers: ',cloneNumber == numbers);
+// console.log('newClonedNumbers == numbers: ',newClonedNumbers == numbers);
+// newClonedNumbers[2] = 5000
+// console.log(': ',newClonedNumbers);
+// console.log(': ',numbers);
+// console.log(': ===================');
+// cloneNumber[2] = 500
+// console.log(': ',cloneNumber);
+// console.log(': ',numbers);
+
+// const dnumbers = numbers.slice()//тоже способ клонирования массива по значению
+// console.log(': ',dnumbers);
+
+// const arr = [].concat(numbers);// тоже новый массив
+
+const newArray = sortArray(numbers);
+console.log(`newArray: ${newArray}`);
+console.log(`numbers: ${numbers}`);
+
+
+
+
+
+
+
+
+
+
+
+
