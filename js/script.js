@@ -178,11 +178,11 @@
 // const scientists = ['m', 'a', 't', 'c', 'd'];
 // const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43];
 
-const sortArray = ([...arr]) => {
-    arr.sort((a, b) => a - b);
-
-    return arr;
-};
+// const sortArray = ([...arr]) => {
+//     arr.sort((a, b) => a - b);
+//
+//     return arr;
+// };
 //
 // //
 // // const [x, y, ...restOfIt] = numbers;
@@ -223,12 +223,31 @@ const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43
 
 // const arr = [].concat(numbers);// тоже новый массив
 
-const newArray = sortArray(numbers);
+// const newArray = sortArray(numbers);
+// console.log(`newArray: ${newArray}`);
+// console.log(`numbers: ${numbers}`);
+
+
+//маппинг
+
+const mapping = (arr) => {
+    const newArray = [];
+
+    // for (let i = 0; i < arr.length; i++) {
+    //     newArray[i] = arr[i] + 1;
+    // }
+    for (let i = 0; i < arr.length; i++) {
+        if ((arr[i] % 2)) {// фишка в том что если 6 % 2 - тру если остаток есть и фолс - если остатка нет
+            newArray.push(arr[i]);
+        }
+    }
+
+    return newArray;
+};
+
+const newArray = mapping(numbers);
 console.log(`newArray: ${newArray}`);
 console.log(`numbers: ${numbers}`);
-
-
-
 
 
 
