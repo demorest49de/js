@@ -1,7 +1,9 @@
 'use strict';
 
-for (let i = 1; i <= 10; i++) {
-    for (let j = 1; j <= 10; j++) {
-        console.log(`${i} ^ ${j} = ${i ** j}`);
-    }
-}
+const filter = ([...all],[...failed]) => {
+
+};
+
+const allStud = ['Ivanov', 'Petrov', 'Sidorov', 'Kuznecov', 'Cmirnov', 'Vasechkin'];
+const failedStudents = ['Petrov', 'Kuznecov', 'Cmirnov'];
+
