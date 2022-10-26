@@ -90,6 +90,7 @@
 // console.log(': ', one, two, three);
 //endregion
 
+// region loops
 // let test;
 // let test = JSON.stringify({a: 1, b: 2});
 // test = JSON.parse(test);
@@ -129,6 +130,10 @@
 //
 //     console.log(': ', i);
 // }
+
+//endregion loops
+
+//region arrays
 
 // const animals = ['mouse','dog','cat']
 // animals.length = 3
@@ -200,8 +205,8 @@
 // const joined = [...numbers, ...scientists]// после равно спрэд оператор, до равно рест оператор
 // console.log(': ',joined);
 
-const scientists = ['m', 'a', 't', 'c', 'd'];
-const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43];
+// const scientists = ['m', 'a', 't', 'c', 'd'];
+// const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43];
 
 
 // const cloneNumber = [...numbers];// копирование массива по значению
@@ -230,30 +235,22 @@ const numbers = [123, 54, 13, 93, 141, 91, 74, 16, 61, 106, 166, 116, 41, 80, 43
 
 //маппинг
 
-const mapping = (arr) => {
-    const newArray = [];
-
-    // for (let i = 0; i < arr.length; i++) {
-    //     newArray[i] = arr[i] + 1;
-    // }
-    for (let i = 0; i < arr.length; i++) {
-        if ((arr[i] % 2)) {// фишка в том что если 6 % 2 - тру если остаток есть и фолс - если остатка нет
-            newArray.push(arr[i]);
-        }
-    }
-
-    return newArray;
-};
-
-const newArray = mapping(numbers);
-console.log(`newArray: ${newArray}`);
-console.log(`numbers: ${numbers}`);
-
-
-
-
-
-
-
-
-
+// const mapping = (arr) => {
+//     const newArray = [];
+//
+//     // for (let i = 0; i < arr.length; i++) {
+//     //     newArray[i] = arr[i] + 1;
+//     // }
+//     for (let i = 0; i < arr.length; i++) {
+//         if ((arr[i] % 2)) {// фишка в том что если 6 % 2 - тру если остаток есть и фолс - если остатка нет
+//             newArray.push(arr[i]);
+//         }
+//     }
+//
+//     return newArray;
+// };
+//
+// const newArray = mapping(numbers);
+// console.log(`newArray: ${newArray}`);
+// console.log(`numbers: ${numbers}`);
+//endregion arrays
