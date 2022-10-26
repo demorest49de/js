@@ -254,3 +254,28 @@
 // console.log(`newArray: ${newArray}`);
 // console.log(`numbers: ${numbers}`);
 //endregion arrays
+
+//region forEach, map, reduce, find, filter
+// const scientists = [
+//     {
+//         name: 'mendeleev',
+//         count: 3
+//     },
+//     {
+//         name: `pushkin`,
+//         count: 4
+//     },
+//     {
+//         name: 'tutchev',
+//         count: 5
+//     }
+// ];
+//
+// const newItem = scientists.reduce((acc, item, i, arr) => {
+//     console.log(': ',acc, item.count);
+//     return acc + item.count;
+// }, 0);
+//
+// console.log('newItem: ', newItem);
+
+//endregion forEach, map, reduce, find, filter
