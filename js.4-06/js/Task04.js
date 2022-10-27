@@ -1,13 +1,26 @@
-const getAveragePriceGoods = (array)=>{
-    let sumOfArrayAverage = 0;
+const getAveragePriceGoods = (array) => {
+    let sumOfAveragePerDay = 0;
     for (const element of array) {
-        const [one, two ] = element;
-        const arrayAverage = two/one;
-        sumOfArrayAverage += arrayAverage;
+        const [quantity, total] = element;
+        const averagePerDay = total / quantity;
+        sumOfAveragePerDay += averagePerDay;
     }
 
-    return sumOfArrayAverage / array.length;
-}
+    return sumOfAveragePerDay / array.length;
+};
+
+const getAveragePriceGoodsSecondOption = (array) => {
+    let sumQuantityAll = 0;
+    let sumTotalAll = 0;
+    for (const element of array) {
+        const [quantity, total] = element;
+        sumQuantityAll += quantity;
+        sumTotalAll += total;
+    }
+
+
+    return (sumTotalAll / sumQuantityAll);
+};
 
 const allCashbox = [
     [12, 4500],
@@ -22,3 +35,6 @@ const allCashbox = [
 
 const averagePrice = getAveragePriceGoods(allCashbox);
 console.log(': ', averagePrice);
+
+const averagePrice2 = getAveragePriceGoodsSecondOption(allCashbox);
+console.log(': ', averagePrice2);
