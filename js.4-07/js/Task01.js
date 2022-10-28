@@ -1,6 +1,6 @@
 'use strict';
 
-const randomArray = (quantity) => {
+const randomArrayV1 = (quantity) => {
     const array = [];
     array.length = quantity;
     for (let i = 0; i < array.length; i++) {
@@ -10,5 +10,4 @@ const randomArray = (quantity) => {
     return array;
 };
 
-const result = randomArray(150);
-console.log(': ', result);
+console.log(': ', randomArrayV1(150));
