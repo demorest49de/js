@@ -2,6 +2,10 @@ const randomArrayV3 = (length = 1, n = 1, m = 1, parity) => {
 
     n = Math.abs(n);
     m = Math.abs(m);
+
+    if(n === 0) n = 1;
+    if(m === 0) m = 1;
+
     let min = 0;
     let max = 0;
 
@@ -12,12 +16,12 @@ const randomArrayV3 = (length = 1, n = 1, m = 1, parity) => {
         min = m;
         max = n;
     }
-    console.log(': ', min, max);
+    max += 1;
     const array = [];
     array.length = length;
 
     for (let i = 0; i < array.length; i++) {
-        array[i] = Math.trunc(Math.random() * (max - min) + min);
+        array[i] = Math.trunc(Math.random() * (max-min) + min);
     }
 
     if (parity === 'even') {

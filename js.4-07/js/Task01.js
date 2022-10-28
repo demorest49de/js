@@ -1,8 +1,8 @@
 'use strict';
 
-const randomArrayV1 = (quantity) => {
+const randomArrayV1 = (length) => {
     const array = [];
-    array.length = quantity;
+    array.length = length;
     for (let i = 0; i < array.length; i++) {
         array[i] = Math.trunc(Math.random() * 100) + 1;
     }
@@ -10,4 +10,4 @@ const randomArrayV1 = (quantity) => {
     return array;
 };
 
-console.log(': ', randomArrayV1(150));
+console.log(': ', randomArrayV1(15));
