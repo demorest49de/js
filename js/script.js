@@ -256,26 +256,68 @@
 //endregion arrays
 
 //region forEach, map, reduce, find, filter
-// const scientists = [
-//     {
-//         name: 'mendeleev',
-//         count: 3
-//     },
-//     {
-//         name: `pushkin`,
-//         count: 4
-//     },
-//     {
-//         name: 'tutchev',
-//         count: 5
-//     }
-// ];
+// const foo = (item, i, array) => {
+//     console.log(array);
+// };
+const numbers = [123, 13, 93, 141, 91, 16, 74, 54, 61, 106, 166, 116, 41, 80, 43];
+const scientists = ['mendeleev', 'aristotel', 'tutchev', 'curi', 'darwin'];
+
+// numbers.forEach((item, i, array)=>{// foreach - ничего не возвращает перебор элементов.
+// используется для добавления элементов в другой массив по условию.
+//     console.log(item);
+// })
+
+// scientists.forEach(foo);// функцию можно задавать снаружи
 //
-// const newItem = scientists.reduce((acc, item, i, arr) => {
-//     console.log(': ',acc, item.count);
+// const item = numbers.find((item, i, arr) => {// find - найти первый элемент по условию
+//     return !(item % 2);
+// });
+// console.log(item);
+
+// const items = numbers.filter((item, i, arr) => {//find - найти массив элементов по условию
+//     return !(item % 2);
+// });
+// console.log(item);
+//
+// const newArr = numbers.map((item) => {//map - работа с каждым элементом отдельно
+//     // можно задать много разных инструкций и переделать массив как следует
+//     if (item * 2 > 200) return null;
+//     return item;
+// });
+//
+// console.log(': ', newArr);
+
+// const newArr = numbers.some((item) => typeof item === 'string');// проверка на условие любого эл-та массива
+// console.log(': ', newArr);
+
+// const newArr = numbers.every((item) => typeof item === 'number');// проверка на условие всех эл-тов массива
+// console.log(': ', newArr);
+
+const countSomething = [
+    {
+        name: 'mendeleev',
+        count: 3
+    },
+    {
+        name: `pushkin`,
+        count: 4
+    },
+    {
+        name: 'tutchev',
+        count: 5
+    }
+];
+
+// const newItem = countSomething.reduce((acc, item, i, arr) => {
+//     console.log(': ', acc, item.count);
 //     return acc + item.count;
 // }, 0);
-//
+// console.log(newItem);
 // console.log('newItem: ', newItem);
+//flat - выпрямление массива вложеные массивы становятся элементами одномерного массива
+// const nested = [123, 13, 93, 141, 91, [16, 74, 54], 61, 106, 166, 116, 41, 80, 43];
+// console.log(': ',nested);
+// const flatArray = nested.flat(Infinity)
+// console.log(': ',flatArray);
 
 //endregion forEach, map, reduce, find, filter
