@@ -1,4 +1,4 @@
-const randomArrayV2 = (length = 1, n = 1, m = 1) => {
+const randomArrayV2 = (length = 1, n = 1, m = 1, parity) => {
 
     n = Math.abs(n);
     m = Math.abs(m);
@@ -20,7 +20,28 @@ const randomArrayV2 = (length = 1, n = 1, m = 1) => {
         array[i] = Math.trunc(Math.random() * (max - min) + min);
     }
 
+    if (parity === 'even') {
+        const evenNumbers = [];
+        array.forEach((item) => {
+            if (!(item % 2)) {
+                evenNumbers.push(item);
+            }
+        });
+
+        return evenNumbers;
+    } else if (parity === 'odd') {
+        const oddNumbers = [];
+
+        array.forEach((item) => {
+            if (item % 2) {
+                oddNumbers.push(item);
+            }
+        });
+
+        return oddNumbers;
+    }
+
     return array;
 };
 
-console.log(': ', randomArrayV2(25, -65, -33));
+console.log(': ', randomArrayV2(25, -65, -33, 'even'));
