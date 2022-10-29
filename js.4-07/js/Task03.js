@@ -48,4 +48,4 @@ const randomArrayV3 = (length = 1, n = 1, m = 1, parity) => {
     return array;
 };
 
-console.log(': ', randomArrayV3(25, -65, -33, 'odd'));
+console.log(': ', randomArrayV3(45, -20, -1, 'even'));
