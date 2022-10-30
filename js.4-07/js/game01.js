@@ -8,7 +8,7 @@ const guessNumber = () => {
     const secretNumber = getRandom();
 
     let userGuess = prompt('Введите загаданное число от 1 до 100');
-    console.log(': ', userGuess);
+
     while (secretNumber != userGuess) {
         while (isNaN(userGuess)) {
             userGuess = prompt(`Введите число!`);
