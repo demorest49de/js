@@ -1,27 +1,29 @@
-const randomArrayV3 = (length = 1, n = 1, m = 1, parity) => {
+const randomArrayV3 = (length, n, m, parity = '') => {
 
-    n = Math.abs(n);
-    m = Math.abs(m);
-
-    if(n === 0) n = 1;
-    if(m === 0) m = 1;
-
-    let min = 0;
-    let max = 0;
-
-    if (n < m) {
-        min = n;
-        max = m;
-    } else {
-        min = m;
-        max = n;
-    }
-    max += 1;
     const array = [];
     array.length = length;
 
+    let min = n;
+    let max = m;
+
+    if (n > m) {
+        min = m;
+        max = n;
+    }
+
+    max += 1;
+    min -= 1;
+
     for (let i = 0; i < array.length; i++) {
-        array[i] = Math.trunc(Math.random() * (max-min) + min);
+        array[i] = Math.trunc((Math.random() * (max - min)) + min);
+
+        if (array[i] === 0) {
+            array[i] = Math.abs(array[i]);
+        }
+    }
+
+    if(parity === ''){
+        return array;
     }
 
     if (parity === 'even') {
@@ -48,4 +50,4 @@ const randomArrayV3 = (length = 1, n = 1, m = 1, parity) => {
     return array;
 };
 
-console.log(': ', randomArrayV3(45, -20, -1, 'even'));
+console.log('task03: ', randomArrayV3(45, -11, 0, 'even'));
