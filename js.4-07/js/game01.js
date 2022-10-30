@@ -10,10 +10,10 @@ const guessNumber = () => {
     let userGuess = prompt('Введите загаданное число от 1 до 100');
     console.log(': ', userGuess);
     while (secretNumber != userGuess) {
-        if (userGuess === null) return;
         while (isNaN(userGuess)) {
             userGuess = prompt(`Введите число!`);
         }
+        if (userGuess === null) return;
         if (userGuess > secretNumber) {
             userGuess = prompt(`Меньше! Попробуйте еще раз!`);
         } else {
