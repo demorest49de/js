@@ -2,18 +2,11 @@ const randomArrayV2 = (length, n, m) => {
 
     const array = [];
     array.length = length;
-
-    let min = n;
-    let max = m;
-
-    if (n > m) {
-        min = m;
-        max = n;
-    }
-
+    let min = Math.min(n, m);
+    let max = Math.max(n, m);
     max += 1;
     min -= 1;
-
+    console.log(': ',min, max);
     for (let i = 0; i < array.length; i++) {
         array[i] = Math.trunc((Math.random() * (max - min)) + min);
 
@@ -26,3 +19,4 @@ const randomArrayV2 = (length, n, m) => {
 };
 
 console.log('task02: ', randomArrayV2(35, 2, -11));
+console.log('task02: ', randomArrayV2(35, -2, 11));
