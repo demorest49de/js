@@ -4,7 +4,7 @@ const getRandom = (min, max, number) => {
     if (number === 0) number = Math.abs(number);
     return number;
 };
-const randomArrayV3 = (length, n, m, parity) => {
+const randomArrayV3 = (length, n, m, parity = '') => {
     const array = [];
     array.length = length;
     let min = Math.min(n, m);
@@ -14,6 +14,12 @@ const randomArrayV3 = (length, n, m, parity) => {
 
     for (let i = 0; i < array.length; i++) {
         let number = 0;
+
+        if(parity === ''){
+            array[i] = getRandom(min, max, number);
+            continue;
+        }
+
         if (parity === 'even') {
             do {
                 number = getRandom(min, max, number);
@@ -29,4 +35,4 @@ const randomArrayV3 = (length, n, m, parity) => {
     return array;
 };
 
-console.log('task03: ', randomArrayV3(45, -12, 1, 'even'));
+console.log('task03: ', randomArrayV3(45, -12, 1, 'odd'));
