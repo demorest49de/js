@@ -322,10 +322,12 @@ const countSomething = [
 
 //endregion forEach, map, reduce, find, filter
 
+const login = 'andrey';
+const lastname = 'shevchenko';
 
 const user = {
-    firstname: 'andrey',
-    lastname: 'shevcehnko',
+    firstname: login,
+    lastname,
     'last used weapon': 'army nife',
     cars: ['toyota', 'mazda'],
     age: 41,
@@ -346,12 +348,29 @@ const user = {
 // delete user.cars;
 // console.log(': ',user);
 
-user.firstname = 'demorest'
+user.firstname = 'demorest';//изменение
 user.smoke = true;//добавление свойств в объект
 
-console.log(': ',user);
+console.log(': ', user);
 
+//объект как и массив ссылочный
 
+const element = {
+    tagName: 'div',
+    className: 'container',
+};
+
+const el2 = element;//
+//element = {}; // нельзя  в константе уже существует объект;
+
+console.log(': ', el2 === element);
+
+const decorObj = obj => {
+    obj.prop = 'asdf';
+};
+
+decorObj(element);// декорирование добавление новых свойств
+console.log('element: ', element);
 
 
 
