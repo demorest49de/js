@@ -321,3 +321,38 @@ const countSomething = [
 // console.log(': ',flatArray);
 
 //endregion forEach, map, reduce, find, filter
+
+
+const user = {
+    firstname: 'andrey',
+    lastname: 'shevcehnko',
+    'last used weapon': 'army nife',
+    cars: ['toyota', 'mazda'],
+    age: 41,
+    status: {alive: true, wanted: false},
+    say() {
+        console.log(`suprise...`);
+    }
+};
+
+// const property = 'firstname';
+// console.log(': ', user.firstname);
+// console.log(': ', user['lastname']);
+// console.log(': ', user['last used weapon']);
+// console.log(': ', user[property]);
+// user.say();
+
+// console.log(': ',user);
+// delete user.cars;
+// console.log(': ',user);
+
+user.firstname = 'demorest'
+user.smoke = true;//добавление свойств в объект
+
+console.log(': ',user);
+
+
+
+
+
+
