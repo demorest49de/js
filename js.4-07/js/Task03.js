@@ -1,7 +1,7 @@
 const getRandom = (min, max, number) => {
-    do {
-        number = Math.trunc((Math.random() * (max - min)) + min);
-    } while (number === 0);
+
+    number = Math.trunc((Math.random() * (max - min)) + min);
+    if (number === 0) number = Math.abs(number);
     return number;
 };
 const randomArrayV3 = (length, n, m, parity) => {
