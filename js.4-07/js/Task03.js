@@ -1,38 +1,27 @@
-const getRandom = (min, max, number) => {
-
-    number = Math.trunc((Math.random() * (max - min)) + min);
-    if (number === 0) number = Math.abs(number);
-    return number;
-};
 const randomArrayV3 = (length, n, m, parity = '') => {
-    const array = [];
-    array.length = length;
-    let min = Math.min(n, m);
-    let max = Math.max(n, m);
-    max += 1;
-    min -= 1;
 
-    for (let i = 0; i < array.length; i++) {
+    const min = Math.trunc(Math.min(n, m)) - 1;
+    const max = Math.trunc(Math.max(n, m)) + 1;
+
+    return Array(length).fill().map(() => {
         let number = 0;
 
-        if(parity === ''){
-            array[i] = getRandom(min, max, number);
-            continue;
+        switch (parity) {
+            case 'even':
+                do {
+                    number = Math.trunc(Math.random() * (max - min) + min);
+                } while (number % 2);
+                return number;
+                break;
+            case 'odd':
+                do {
+                    number = Math.trunc(Math.random() * (max - min) + min);
+                } while (!(number % 2));
+            default:
+                return number = Math.trunc(Math.random() * (max - min) + min);
+                break;
         }
-
-        if (parity === 'even') {
-            do {
-                number = getRandom(min, max, number);
-            } while (number % 2);
-        } else if (parity === 'odd') {
-            do {
-                number = getRandom(min, max, number);
-            } while (!(number % 2));
-        }
-        array[i] = number;
-    }
-
-    return array;
+    });
 };
 
-console.log('task03: ', randomArrayV3(45, -12, 1, 'odd'));
+console.log('task03: ', randomArrayV3(45, 3, -13, 'odd'));
