@@ -351,27 +351,105 @@ const user = {
 user.firstname = 'demorest';//изменение
 user.smoke = true;//добавление свойств в объект
 
-console.log(': ', user);
+// console.log(': ', user);
 
 //объект как и массив ссылочный
 
-const element = {
-    tagName: 'div',
-    className: 'container',
-};
-
-const el2 = element;//
+// const element = {
+//     tagName: 'div',
+//     className: 'container',
+// };
+//
+// const el2 = element;//
 //element = {}; // нельзя  в константе уже существует объект;
 
-console.log(': ', el2 === element);
+// console.log(': ', el2 === element);
 
 const decorObj = obj => {
     obj.prop = 'asdf';
 };
 
-decorObj(element);// декорирование добавление новых свойств
-console.log('element: ', element);
+// decorObj(element);// декорирование добавление новых свойств
+// console.log('element: ', element);
+
+// перебор объектов
 
 
+// for (const prop in user) {//этот перебор выводит также свойства которые у объекта в прототипе
+//     console.log(`user.${prop} = ${user[prop]}`);
+// }
 
+// const keys = Object.keys(user)
+// for (const prop of keys) {
+//     console.log(`user.${prop} = ${user[prop]}`);
+// }
+//
+//
+// const values = Object.values(user)
+// console.log(': ',values);
 
+// const entries = Object.entries(user)
+// console.log(': ',entries);
+// for (const [key, value] of entries) {
+//     console.log(`${key} = ${value}`);
+// }
+//рекомендации keys, values, entries
+
+// из массива в объект
+
+// const arrayOfUser = [
+//     [
+//         "firstname",
+//         "demorest"
+//     ],
+//     [
+//         "lastname",
+//         "shevchenko"
+//     ],
+//     [
+//         "lastweapon",
+//         "armynife"
+//     ],
+//     [
+//         "cars",
+//         [
+//             "toyota",
+//             "mazda"
+//         ]
+//     ],
+//     [
+//         "age",
+//         41
+//     ],
+//     [
+//         "status",
+//         [
+//             "alive", true,
+//             "wanted", false
+//         ]
+//     ],
+//     [
+//         "say",
+//         null
+//     ],
+//     [
+//         "smoke",
+//         true
+//     ]
+// ];
+//
+// const objectFromArray = Object.fromEntries(arrayOfUser);
+// console.log(': ', objectFromArray);
+
+const obj1 = {
+    a: 1, b: {a: 2},
+};
+
+const obj2 = {
+    c: 3, b: {
+        d: 4
+    },
+};
+
+Object.assign(obj1, obj2);
+console.log(': ',obj1);
