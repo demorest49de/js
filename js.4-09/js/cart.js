@@ -2,11 +2,10 @@
 
 const cart = {
     items: [],
-    totalPrice: 0,
-    count: 0,
-    getTotalPrice() {
-        return this.totalPrice;
+    get totalPrice() {
+        return this.calculateItemPrice();
     },
+    count: 0,
     add(name, price, amount = 1) {
         const product = {
             name,
@@ -25,7 +24,7 @@ const cart = {
         for (const item of this.items) {
             totalForAllProducts += item.price * item.amount;
         }
-        this.totalPrice = totalForAllProducts;
+        return totalForAllProducts;
     },
     clear() {
         this.items = [];
@@ -44,4 +43,3 @@ cart.add('parmesane', 300, 1);
 cart.add('black angus', 1500, 2);
 
 cart.print();
-
