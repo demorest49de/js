@@ -14,7 +14,6 @@ const cart = {
         };
         this.items.push(product);
         this.increaseCount(amount);
-        this.calculateItemPrice();
     },
     increaseCount(amount) {
         this.count += amount;
@@ -28,7 +27,6 @@ const cart = {
     },
     clear() {
         this.items = [];
-        this.totalPrice = 0;
         this.count = 0;
     },
     print() {
