@@ -10,7 +10,7 @@ const recursionForArray = (array) => {
   for (let i = 0; i < array.length; i++) {
     sum += array[i];
   }
-
+  console.log(': ',sum);
   if (sum <= 50) {
     console.log(': ', array);
     array.push(random);
