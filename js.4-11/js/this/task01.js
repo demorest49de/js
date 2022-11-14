@@ -7,7 +7,7 @@ const rectangle = {
     return this.width + 'см';
   },
   set Width(value) {
-    if (typeof (value) === 'number') {
+    if (typeof(value) === 'number') {
       this.width = value;
     } else {
       console.log(`${value} is not a number`);
@@ -17,7 +17,7 @@ const rectangle = {
     return this.height + 'см';
   },
   set Height(value) {
-    if (typeof (value) === 'number') {
+    if (typeof(value) === 'number') {
       this.height = value;
     } else {
       console.log(`${value} is not a number`);
@@ -31,4 +31,3 @@ rectangle.Width = 111;
 rectangle.Height = 45;
 console.log(rectangle.Width);
 console.log(rectangle.Height);
-

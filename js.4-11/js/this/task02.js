@@ -1,0 +1,51 @@
+'use strict';
+
+const cart = {
+  items: [],
+  discount: 0,
+  set setDiscount(value) {
+    if (value === 'METHED') {
+      this.discount = 15;
+    } else if (value === 'NEWYEAR') {
+      this.discount = 21;
+    }
+  },
+  get totalPrice() {
+    return this.calculateItemPrice();
+  },
+  count: 0,
+  add(name, price, amount = 1) {
+    const product = {
+      name,
+      price,
+      amount,
+    };
+    this.items.push(product);
+    this.increaseCount(amount);
+  },
+  increaseCount(amount) {
+    this.count += amount;
+  },
+  calculateItemPrice() {
+    let totalForAllProducts = 0;
+    for (const item of this.items) {
+      totalForAllProducts += item.price * item.amount;
+    }
+    return totalForAllProducts - (totalForAllProducts * (this.discount / 100));
+  },
+  clear() {
+    this.items = [];
+    this.count = 0;
+  },
+  print() {
+    console.log(JSON.stringify(this.items));
+    console.log(`Общая стоимость корзины: ${this.totalPrice} рублей`);
+  },
+};
+
+cart.add('red wine', 2000, 3);
+cart.add('white wine', 1000, 1);
+cart.add('parmesane', 300, 1);
+cart.add('black angus', 1500, 2);
+cart.setDiscount = 'NEWYEAR';
+cart.print();
