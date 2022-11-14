@@ -1,5 +1,4 @@
 'use strict';
-
 // region primitives
 // const name = 'xiaomi 12t pro';
 // const quantity = 5;
@@ -294,18 +293,18 @@ const scientists = ['mendeleev', 'aristotel', 'tutchev', 'curi', 'darwin'];
 // console.log(': ', newArr);
 
 const countSomething = [
-    {
-        name: 'mendeleev',
-        count: 3
-    },
-    {
-        name: `pushkin`,
-        count: 4
-    },
-    {
-        name: 'tutchev',
-        count: 5
-    }
+  {
+    name: 'mendeleev',
+    count: 3
+  },
+  {
+    name: `pushkin`,
+    count: 4
+  },
+  {
+    name: 'tutchev',
+    count: 5
+  }
 ];
 
 // const newItem = countSomething.reduce((acc, item, i, arr) => {
@@ -326,15 +325,15 @@ const login = 'andrey';
 const lastname = 'shevchenko';
 
 const user = {
-    firstname: login,
-    lastname,
-    'last used weapon': 'army nife',
-    cars: ['toyota', 'mazda'],
-    age: 41,
-    status: {alive: true, wanted: false},
-    say() {
-        console.log(`suprise...`);
-    }
+  firstname: login,
+  lastname,
+  'last used weapon': 'army nife',
+  cars: ['toyota', 'mazda'],
+  age: 41,
+  status: {alive: true, wanted: false},
+  say() {
+    console.log(`suprise...`);
+  }
 };
 
 // const property = 'firstname';
@@ -366,7 +365,7 @@ user.smoke = true;//добавление свойств в объект
 // console.log(': ', el2 === element);
 
 const decorObj = obj => {
-    obj.prop = 'asdf';
+  obj.prop = 'asdf';
 };
 
 // decorObj(element);// декорирование добавление новых свойств
@@ -441,15 +440,61 @@ const decorObj = obj => {
 // const objectFromArray = Object.fromEntries(arrayOfUser);
 // console.log(': ', objectFromArray);
 
-const obj1 = {
-    a: 1, b: {a: 2},
+// const obj1 = {
+//     a: 1, b: {a: 2},
+// };
+//
+// const obj2 = {
+//     c: 3, b: {
+//         d: 4
+//     },
+// };
+//
+// Object.assign(obj1, obj2);
+// console.log(': ',obj1);
+
+
+//this
+// у стрелочных функций нет контекста вызова. вместо стрелочной функции нужно использовать function
+
+/*3 правила
+* 1- привязка по умолчанию: когда зис внутри функции без использования строго режима. при включении
+* стр режима, в зис убирается привязка от глоб области видимости и зис становится undefined;
+* 2- не явная привязка: важно! === место вызова функции
+* 3- явная привязка*/
+
+function thisfoo(a, b, c) {
+  console.log(': ', a, b, c);
+  console.log(': ', this);
+}
+
+// thisfoo();// привязка по умолчанию
+
+const obj = {
+  x: 5,
+  foo() {
+    console.log(': ', this);
+  },
+  bar: thisfoo,
 };
 
-const obj2 = {
-    c: 3, b: {
-        d: 4
-    },
+// obj.foo();// не явная привязка
+// obj.bar();// место вызова - объект // не явная привязка
+
+const bar = obj.foo;// место вызова - функция, нет привязки к объекту
+
+// bar();
+
+const bar2 = (cb) => {
+  cb();
 };
 
-Object.assign(obj1, obj2);
-console.log(': ',obj1);
+// bar2(obj.bar)//не явная привязка, так как вызов из функции не из объекта
+
+thisfoo.call(obj, 1, 2, 3);//явная привязка object k thisfoo, аргументы
+thisfoo.apply(obj, [1, 2, 3]);//явная привязка object k thisfoo, только массив
+const barbar = thisfoo.bind(obj);//явная привязка object k thisfoo - возвращает функцию к которой привязан контекст
+
+barbar();
+
+// метод форич обладает явной привязкой. через запятую 2 параметром передаем об
