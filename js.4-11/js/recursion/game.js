@@ -1,47 +1,36 @@
 'use strict';
-alert(`Угадай число`);
-console.log(': ');
-console.log(': ');
-console.log(': ');
-console.log(': ');
-console.log(': ');
-console.log(': ');
-console.log(': ');
-console.log(': ');
+// alert(`Угадай число`);
 
 const secretNumber = Math.trunc(Math.random() * 100 + 1);
 console.log(': secretNumber', secretNumber);
-let userGuess = prompt('Введите загаданное число от 1 до 100');
 
-const guessNumber = () => {
-  if (userGuess === null) {
+const userGuess = prompt('Введите загаданное число от 1 до 100');
+
+const guessNumber = (response) => {
+
+  console.log(': ',response);
+  console.log(': ',typeof (response));
+
+  if (response === null) {
     alert('Выход из программы...');
     return;
+  } else if (isNaN(response) || +response === 0) {
+    response = prompt(`Введите число!`);
+    return guessNumber(response);
   }
 
-  if (isNaN(userGuess) || (!userGuess)) {
-    userGuess = prompt(`Введите число!`);
-    console.log(': ', userGuess, typeof (userGuess));
-    guessNumber();
-    return;
-  }
+  switch (+response === secretNumber) {
 
-  if (secretNumber !== +userGuess) {
-    console.log(': ', userGuess, typeof (userGuess));
+    case true:
+      alert(`Вы угадали число ${response}!`);
+      return;
 
-    if (userGuess > secretNumber) {
-      userGuess = prompt(`Меньше! Попробуйте еще раз!`);
-      guessNumber();
+    case false:
+      response = response > secretNumber ? prompt(`Меньше! Попробуйте еще раз!`)
+        : prompt(`Больше! Попробуйте еще раз!`);
+      guessNumber(response);
       return;
-    } else {
-      userGuess = prompt(`Больше! Попробуйте еще раз!`);
-      guessNumber();
-      return;
-    }
-  } else {
-    alert(`Вы угадали ...`);
-    return;
   }
 };
 
-guessNumber();
+guessNumber(userGuess);
