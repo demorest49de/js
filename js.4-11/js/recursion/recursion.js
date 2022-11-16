@@ -17,7 +17,7 @@ const checkSum = (sum, random) => {
 
     addRandom(sum);
   }
-  return array;
+  return [...array];
 };
 
 console.log(addRandom());
