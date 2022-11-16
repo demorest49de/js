@@ -9,7 +9,7 @@ const rectangle = {
   get square() {
     return (this._width * this._height) + 'см';
   },
-  set Width(value) {
+  set width(value) {
     if (typeof(value) === 'number') {
       this._width = value;
     } else {
@@ -25,8 +25,8 @@ const rectangle = {
   },
 };
 
-rectangle.Width = 'alsgfj';
-rectangle.Width = 111;
+rectangle.width = 'alsgfj';
+rectangle.width = 111;
 rectangle.height = 45;
 console.log(rectangle.perimeter);
 console.log(rectangle.square);
