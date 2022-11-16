@@ -8,7 +8,7 @@ const addRandom = (sum = 0) => {
   let sumCounter = sum;
   sumCounter += random;
 
-   return checkSum(sumCounter, random);
+  return checkSum(sumCounter, random);
 };
 
 const checkSum = (sum, random) => {

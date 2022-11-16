@@ -1,13 +1,12 @@
 'use strict';
 alert(`Угадай число`);
 
-const guessHandler = () =>{
-  let secretNumber = Math.trunc(Math.random() * 100 + 1);
+const guessHandler = () => {
+  const secretNumber = Math.trunc(Math.random() * 100 + 1);
   console.log(': secretNumber', secretNumber);
   const guessNumber = (response) => {
-
-    console.log(': ',response);
-    console.log(': ',typeof (response));
+    console.log(': ', response);
+    console.log(': ', typeof(response));
 
     if (response === null) {
       alert('Выход из программы...');
@@ -18,20 +17,20 @@ const guessHandler = () =>{
     }
 
     switch (+response === secretNumber) {
-
       case true:
         alert(`Вы угадали число ${response}!`);
         return;
 
       case false:
-        response = response > secretNumber ? prompt(`Меньше! Попробуйте еще раз!`)
-          : prompt(`Больше! Попробуйте еще раз!`);
+        response = response > secretNumber ?
+          prompt(`Меньше! Попробуйте еще раз!`) :
+          prompt(`Больше! Попробуйте еще раз!`);
         guessNumber(response);
         return;
     }
   };
   guessNumber(prompt('Введите загаданное число от 1 до 100'));
-}
+};
 
 guessHandler();
 
