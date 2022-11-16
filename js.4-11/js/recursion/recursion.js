@@ -14,7 +14,7 @@ const addRandom = (sum = 0) => {
 const checkSum = (sum, random) => {
   if (sum <= 50) {
     array.push(random);
-    
+
     addRandom(sum);
   }
   return array;
