@@ -1,8 +1,6 @@
 'use strict';
 alert(`Угадай число`);
 
-const userGuess = prompt('Введите загаданное число от 1 до 100');
-
 const guessHandler = () =>{
   let secretNumber = Math.trunc(Math.random() * 100 + 1);
   console.log(': secretNumber', secretNumber);
@@ -32,7 +30,7 @@ const guessHandler = () =>{
         return;
     }
   };
-  guessNumber(userGuess);
+  guessNumber(prompt('Введите загаданное число от 1 до 100'));
 }
 
 guessHandler();
