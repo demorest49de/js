@@ -1,24 +1,24 @@
 'use strict';
 
 const rectangle = {
-  width: 5,
-  height: 5,
-  get Width() {
-    return this.width + 'см';
+  _width: 5,
+  _height: 5,
+  get perimeter() {
+    return (2 * (this._width + this._height)) + 'см';
+  },
+  get square() {
+    return (this._width * this._height) + 'см';
   },
   set Width(value) {
     if (typeof(value) === 'number') {
-      this.width = value;
+      this._width = value;
     } else {
       console.log(`${value} is not a number`);
     }
   },
-  get Height() {
-    return this.height + 'см';
-  },
-  set Height(value) {
+  set height(value) {
     if (typeof(value) === 'number') {
-      this.height = value;
+      this._height = value;
     } else {
       console.log(`${value} is not a number`);
     }
@@ -27,7 +27,6 @@ const rectangle = {
 
 rectangle.Width = 'alsgfj';
 rectangle.Width = 111;
-
-rectangle.Height = 45;
-console.log(rectangle.Width);
-console.log(rectangle.Height);
+rectangle.height = 45;
+console.log(rectangle.perimeter);
+console.log(rectangle.square);
