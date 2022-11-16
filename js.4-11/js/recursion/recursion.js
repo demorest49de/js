@@ -2,21 +2,22 @@
 
 const array = [];
 
-const recursionForArray = (array) => {
+
+const addRandom = (sum = 0) => {
   const random = Math.trunc(Math.random() * 10);
+  let sumCounter = sum;
+  sumCounter += random;
 
+   return checkSum(sumCounter, random);
+};
 
-  let sum = 0;
-  for (let i = 0; i < array.length; i++) {
-    sum += array[i];
-  }
-  console.log(': ',sum);
+const checkSum = (sum, random) => {
   if (sum <= 50) {
-    console.log(': ', array);
     array.push(random);
-    recursionForArray(array);
+    
+    addRandom(sum);
   }
   return array;
 };
 
-recursionForArray(array);
+console.log(addRandom());
