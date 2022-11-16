@@ -3,7 +3,7 @@
 const array = [];
 
 
-const addRandom = (sum = 0) => {
+const arrayCheckerHandler = (sum = 0) => {
   const random = Math.trunc(Math.random() * 10);
   let sumCounter = sum;
   sumCounter += random;
@@ -15,9 +15,9 @@ const checkSum = (sum, random) => {
   if (sum <= 50) {
     array.push(random);
 
-    addRandom(sum);
+    arrayCheckerHandler(sum);
   }
   return [...array];
 };
 
-console.log(addRandom());
+console.log(arrayCheckerHandler());
