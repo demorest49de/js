@@ -8,16 +8,17 @@ const arrayCheckerHandler = (sum = 0) => {
   let sumCounter = sum;
   sumCounter += random;
 
+  const checkSum = (sum, random) => {
+    if (sum <= 50) {
+      array.push(random);
+
+      arrayCheckerHandler(sum);
+    }
+    return [...array];
+  };
+
   return checkSum(sumCounter, random);
 };
 
-const checkSum = (sum, random) => {
-  if (sum <= 50) {
-    array.push(random);
-
-    arrayCheckerHandler(sum);
-  }
-  return [...array];
-};
 
 console.log(arrayCheckerHandler());
