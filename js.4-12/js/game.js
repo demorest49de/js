@@ -6,18 +6,22 @@
 
   const viewLangRUS = {
     'computer': 'Компьютер',
-    you: 'Вы',
-    youWin: 'Вы выиграли',
-    youLose: 'Вы проиграли',
-    draw: 'Ничья',
+    'you': 'Вы',
+    'youWin': 'Вы выиграли',
+    'youLose': 'Вы проиграли',
+    'draw': 'Ничья',
+    'more': 'Еще',
+    'result': 'Результат',
   };
 
   const viewLangENG = {
     'computer': 'Computer',
-    you: 'You',
-    youWin: 'You win',
-    youLose: 'You lose',
-    draw: 'Draw',
+    'you': 'You',
+    'youWin': 'You win',
+    'youLose': 'You lose',
+    'draw': 'Draw',
+    'more': 'more',
+    'result': 'Result',
   };
 
   const getRandomIntInclusive = (min, max) => {
@@ -27,22 +31,17 @@
   };
 
   const getFigure = (lang) => {
-    let random = getRandomIntInclusive(0, lang.length - 1);
+    const random = getRandomIntInclusive(0, lang.length - 1);
     return lang[random];
   };
 
   const game = (language) => {
-
     const result = {
       player: 0,
       computer: 0,
     };
 
-    const addSpace = (lang) => {
-      return lang.map((item, index) => {
-        return index !== 0 ? ' ' + item : item;
-      });
-    };
+    const addSpace = (lang) => lang.map((item, index) => (index !== 0 ? ' ' + item : item));
 
 
     const parseResponse = (str) => {
@@ -83,6 +82,10 @@
       }
     };
 
+    const exitMessage = () => {
+      alert(`${viewLang.result}:\n${viewLang.computer} - ${result.computer},\n${viewLang.you} - ${result.player}`);
+    };
+    language = language.toUpperCase();
     const lang = language === 'EN' || language === 'ENG' ?
       FIGURES_ENG : FIGURES_RUS;
 
@@ -102,7 +105,7 @@
 
         switch (true) {
           case response === null:
-            return alert(`Результат:\n${viewLang.computer} - ${result.computer},\n${viewLang.you} - ${result.player}`);
+            return exitMessage();
 
           case response === undefined:
             return start();
@@ -115,15 +118,15 @@
             alert(`${viewLang.computer}: ${figure}\n${viewLang.you}: ${response}\n${viewLang.youLose}`);
             result.computer += 1;
             console.log('result.computer: ', result.computer);
-            response = prompt('Еще?');
-            return response !== null ? start() : alert('Выход из программы...');
+            response = prompt(`${viewLang.more}?`);
+            return response !== null ? start() : exitMessage();
 
           case (getWinner(response, figure).hasWin):
             alert(`${viewLang.computer}: ${figure}\n${viewLang.you}: ${response}\n${viewLang.youWin}`);
             result.player += 1;
             console.log('result.player: ', result.player);
             response = prompt('Еще?');
-            return response !== null ? start() : alert('Выход из программы...');
+            return response !== null ? start() : exitMessage();
 
           default:
             return;
