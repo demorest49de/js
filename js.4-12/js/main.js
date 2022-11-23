@@ -1,4 +1,4 @@
 'use strict';
 
-const startGame = window.RPC('en');
+const startGame = window.rockPaperScissors('en');
 startGame();
