@@ -51,36 +51,6 @@ window.rockPaperScissors = (() => {
       return result === -1 ? undefined : result;
     };
 
-    const getRules = (lang) => {
-      const [rock, scissors, paper] = lang;
-
-      const rules = new Map();
-
-      rules.set([rock, scissors], {hasWin: true});
-      rules.set([rock, paper], {hasWin: false});
-
-      rules.set([paper, rock], {hasWin: true});
-      rules.set([paper, scissors], {hasWin: false});
-
-      rules.set([scissors, paper], {hasWin: true});
-      rules.set([scissors, rock], {hasWin: false});
-      rules.set([null], {hasWin: null});
-      return rules;
-    };
-
-    const getWinner = (response, figure) => {
-      response = response.toLowerCase().trim();
-
-      const rules = getRules(lang);
-      const result = response !== figure ? [response, figure] : [null];
-
-      for (const [ruleArray, value] of rules) {
-        if (JSON.stringify(ruleArray) === JSON.stringify(result)) {
-          return value;
-        }
-      }
-    };
-
     const exitMessage = () => {
       alert(`${viewLang.result}:\n${viewLang.computer}` +
         ` - ${result.computer},\n${viewLang.you} - ${result.player}`);
@@ -111,7 +81,7 @@ window.rockPaperScissors = (() => {
             alert(`${viewLang.computer}: ${lang[computer]}\n` +
               `${viewLang.you}: ${lang[user]}\n${viewLang.youWin}`);
             result.player += 1;
-            console.log('result.player: ', result.player);
+
             user = confirm('Еще?');
             console.log('user: ', user);
             return user ? start() : exitMessage();
@@ -120,7 +90,6 @@ window.rockPaperScissors = (() => {
             alert(`${viewLang.computer}: ${lang[computer]}\n` +
               `${viewLang.you}: ${lang[user]}\n${viewLang.youLose}`);
             result.computer += 1;
-            console.log('result.computer: ', result.computer);
             user = confirm(`${viewLang.more}?`);
             return user ? start() : exitMessage();
         }
