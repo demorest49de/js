@@ -35,23 +35,18 @@ window.rockPaperScissors = (() => {
     return lang[random];
   };
 
-  const game = (language) => {
+  const game = (languageSettings) => {
     const result = {
       player: 0,
       computer: 0,
     };
 
-    language = language.toUpperCase();
+    const language = languageSettings.toUpperCase();
     const lang = language === 'EN' || language === 'ENG' ?
       FIGURES_ENG : FIGURES_RUS;
 
     const viewLang = language === 'EN' || language === 'ENG' ?
       viewLangENG : viewLangRUS;
-
-    const addSpace = (lang) => lang.map((item, index) =>
-      (index !== 0 ? ' ' + item : item));
-
-    const arrayWithSpaces = addSpace([...lang]);
 
     const parseResponse = (str) => {
       if (str === null) return null;
@@ -99,7 +94,7 @@ window.rockPaperScissors = (() => {
         const figure = getFigure(lang);
         console.log(': ', figure);
 
-        let response = parseResponse(prompt(`${arrayWithSpaces}?`));
+        let response = parseResponse(prompt(`${lang.join(', ')}?`));
         console.log(': ', response);
 
         switch (true) {
@@ -129,9 +124,6 @@ window.rockPaperScissors = (() => {
             console.log('result.player: ', result.player);
             response = prompt('Еще?');
             return response !== null ? start() : exitMessage();
-
-          default:
-            return;
         }
       };
 
