@@ -30,11 +30,6 @@ window.rockPaperScissors = (() => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  const getFigure = (lang) => {
-    const random = getRandomIntInclusive(0, lang.length - 1);
-    return lang[random];
-  };
-
   const game = (languageSettings) => {
     const result = {
       player: 0,
@@ -51,7 +46,9 @@ window.rockPaperScissors = (() => {
     const parseResponse = (str) => {
       if (str === null) return null;
       else if (str === '') return undefined;
-      return lang.find((item) => item.startsWith(str));
+      const result = lang.indexOf(lang.find((item) => item.startsWith(str)));
+
+      return result === -1 ? undefined : result;
     };
 
     const getRules = (lang) => {
@@ -91,39 +88,41 @@ window.rockPaperScissors = (() => {
 
     return function start() {
       const restart = () => {
-        const figure = getFigure(lang);
-        console.log(': ', figure);
+        const computer = getRandomIntInclusive(0, 2);
+        console.log('computer: ', computer);
 
-        let response = parseResponse(prompt(`${lang.join(', ')}?`));
-        console.log(': ', response);
+        let user = parseResponse(prompt(`${lang.join(', ')}?`));
+        console.log('user: ', user);
 
         switch (true) {
-          case response === null:
+          case user === null:
             return exitMessage();
 
-          case response === undefined:
+          case user === undefined:
             return start();
 
-          case (getWinner(response, figure).hasWin === null):
-            alert(`${viewLang.computer}: ${figure}\n` +
-              `${viewLang.you}: ${response}\n${viewLang.draw}`);
+          case computer === user:
+            alert(`${viewLang.computer}: ${lang[computer]}\n` +
+              `${viewLang.you}: ${lang[user]}\n${viewLang.draw}`);
             return start();
 
-          case (!getWinner(response, figure).hasWin):
-            alert(`${viewLang.computer}: ${figure}\n` +
-              `${viewLang.you}: ${response}\n${viewLang.youLose}`);
-            result.computer += 1;
-            console.log('result.computer: ', result.computer);
-            response = prompt(`${viewLang.more}?`);
-            return response !== null ? start() : exitMessage();
+          case computer === ((user + 1) % lang.length):
 
-          case (getWinner(response, figure).hasWin):
-            alert(`${viewLang.computer}: ${figure}\n` +
-              `${viewLang.you}: ${response}\n${viewLang.youWin}`);
+            alert(`${viewLang.computer}: ${lang[computer]}\n` +
+              `${viewLang.you}: ${lang[user]}\n${viewLang.youWin}`);
             result.player += 1;
             console.log('result.player: ', result.player);
-            response = prompt('Еще?');
-            return response !== null ? start() : exitMessage();
+            user = confirm('Еще?');
+            console.log('user: ', user);
+            return user ? start() : exitMessage();
+
+          default:
+            alert(`${viewLang.computer}: ${lang[computer]}\n` +
+              `${viewLang.you}: ${lang[user]}\n${viewLang.youLose}`);
+            result.computer += 1;
+            console.log('result.computer: ', result.computer);
+            user = confirm(`${viewLang.more}?`);
+            return user ? start() : exitMessage();
         }
       };
 
