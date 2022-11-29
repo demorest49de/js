@@ -31,24 +31,26 @@ window.rockPaperScissors = (() => {
       return language === 'EN' || language === 'ENG';
     },
 
+    currLang : {},
+    currFigures: [],
+
     set lang(language) {
-      console.log(': ', language);
-      this.lang = this.langHandler(language) ?
+      this.currLang = this.langHandler(language) ?
         this.viewLangENG : this.viewLangRUS;
     },
 
     get lang() {
-      return this.lang;
+      return this.currLang;
     },
 
     set figures(language) {
-      console.log(': ', language);
-      this.figures = this.langHandler(language) ?
+
+      this.currFigures = this.langHandler(language) ?
         this.FIGURES_ENG : this.FIGURES_RUS;
     },
 
     get figures() {
-      return this.figures;
+      return this.currFigures;
     },
   };
 
@@ -63,21 +65,20 @@ window.rockPaperScissors = (() => {
       player: 0,
       computer: 0,
     };
-    this.lang = languageSettings;
-    console.log(': ', this.lang);
-    this.figures = languageSettings;
-    console.log(': ', this.lang);
+
+    view.lang = languageSettings;
+    view.figures = languageSettings;
 
     const parseResponse = (str) => {
       if (str === null) return null;
       else if (str === '') return undefined;
-      const result = this.figures.indexOf(this.figures.find((item) => item.startsWith(str)));
+      const result = view.figures.indexOf(view.figures.find((item) => item.startsWith(str)));
       return result === -1 ? undefined : result;
     };
 
     const exitMessage = () => {
-      alert(`${this.lang.result}:\n${this.lang.computer}` +
-        ` - ${this.result.computer},\n${this.lang.you} - ${this.result.player}`);
+      alert(`${view.lang.result}:\n${view.lang.computer}` +
+        ` - ${result.computer},\n${view.lang.you} - ${result.player}`);
     };
 
     const resultGameMessage = ([lang, figures, computer, user, gameResult]) => {
@@ -90,7 +91,7 @@ window.rockPaperScissors = (() => {
         const computer = getRandomIntInclusive(0, 2);
         console.log('computer: ', computer);
 
-        let user = parseResponse(prompt(`${this.figures.join(', ')}?`));
+        let user = parseResponse(prompt(`${view.figures.join(', ')}?`));
         console.log('user: ', user);
 
         switch (true) {
@@ -101,21 +102,21 @@ window.rockPaperScissors = (() => {
             return start();
 
           case computer === user:
-            resultGameMessage([this.lang, this.figures, computer, user, this.lang.draw]);
+            resultGameMessage([view.lang, view.figures, computer, user, view.lang.draw]);
             return start();
 
-          case computer === ((user + 1) % this.figures.length):
-            resultGameMessage([this.lang, this.figures, computer, user, this.lang.youWin]);
+          case computer === ((user + 1) % view.figures.length):
+            resultGameMessage([view.lang, view.figures, computer, user, view.lang.youWin]);
             result.player += 1;
 
-            user = confirm(`${this.lang.more}?`);
+            user = confirm(`${view.lang.more}?`);
             console.log('user: ', user);
             return user ? start() : exitMessage();
 
           default:
-            resultGameMessage([this.lang, this.figures, computer, user, this.lang.youLose]);
+            resultGameMessage([view.lang, view.figures, computer, user, view.lang.youLose]);
             result.computer += 1;
-            user = confirm(`${this.lang.more}?`);
+            user = confirm(`${view.lang.more}?`);
             return user ? start() : exitMessage();
         }
       };
