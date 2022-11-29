@@ -48,7 +48,7 @@ window.rpc = (() => {
 
     return function start() {
 
-      const restart = () => {
+      const doStart = () => {
         const computer = getRandomIntInclusive(0, 2);
         let user = parseResponse(prompt(
           `${figures.join(', ')}? Тот кто выиграл,
@@ -57,7 +57,7 @@ window.rpc = (() => {
           case user === null:
             return;
           case user === undefined:
-            alert(`введите ${figures.join(' или ')} ...`)
+            alert(`введите ${figures.join(' или ')} ...`);
             return start();
 
           case computer === user:
@@ -65,13 +65,13 @@ window.rpc = (() => {
             return start();
           case computer === ((user + 1) % figures.length):
             resultGameMessage([lang, figures, computer, user, lang.youWin]);
-            return user ? start() : exitMessage();
+            return start();
           default:
             resultGameMessage([lang, figures, computer, user, lang.youLose]);
-            return user ? start() : exitMessage();
+            return start();
         }
       };
-      restart();
+      doStart();
     };
   };
   return game;

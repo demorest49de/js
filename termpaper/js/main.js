@@ -1,4 +1,5 @@
 'use strict';
 
 const startRPC = window.rpc();
-startRPC();
+const result = startRPC();
+console.log(': ', result);
