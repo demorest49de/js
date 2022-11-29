@@ -12,7 +12,6 @@ window.rockPaperScissors = (() => {
       'more': 'Еще',
       'result': 'Результат',
     },
-
     viewLangENG: {
       'computer': 'Computer',
       'you': 'You',
@@ -31,9 +30,8 @@ window.rockPaperScissors = (() => {
       return language === 'EN' || language === 'ENG';
     },
 
-    currLang : {},
+    currLang: {},
     currFigures: [],
-
     set lang(language) {
       this.currLang = this.langHandler(language) ?
         this.viewLangENG : this.viewLangRUS;
@@ -65,10 +63,8 @@ window.rockPaperScissors = (() => {
       player: 0,
       computer: 0,
     };
-
     view.lang = languageSettings;
     view.figures = languageSettings;
-
     const parseResponse = (str) => {
       if (str === null) return null;
       else if (str === '') return undefined;
@@ -89,30 +85,20 @@ window.rockPaperScissors = (() => {
     return function start() {
       const restart = () => {
         const computer = getRandomIntInclusive(0, 2);
-        console.log('computer: ', computer);
-
         let user = parseResponse(prompt(`${view.figures.join(', ')}?`));
-        console.log('user: ', user);
-
         switch (true) {
           case user === null:
             return exitMessage();
-
           case user === undefined:
             return start();
-
           case computer === user:
             resultGameMessage([view.lang, view.figures, computer, user, view.lang.draw]);
             return start();
-
           case computer === ((user + 1) % view.figures.length):
             resultGameMessage([view.lang, view.figures, computer, user, view.lang.youWin]);
             result.player += 1;
-
             user = confirm(`${view.lang.more}?`);
-            console.log('user: ', user);
             return user ? start() : exitMessage();
-
           default:
             resultGameMessage([view.lang, view.figures, computer, user, view.lang.youLose]);
             result.computer += 1;
@@ -120,10 +106,8 @@ window.rockPaperScissors = (() => {
             return user ? start() : exitMessage();
         }
       };
-
       restart();
     };
   };
-
   return game;
 })();
