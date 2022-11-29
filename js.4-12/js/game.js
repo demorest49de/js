@@ -1,27 +1,55 @@
 'use strict';
 
 window.rockPaperScissors = (() => {
-  const FIGURES_ENG = ['rock', 'scissors', 'paper'];
-  const FIGURES_RUS = ['камень', 'ножницы', 'бумага'];
 
-  const viewLangRUS = {
-    'computer': 'Компьютер',
-    'you': 'Вы',
-    'youWin': 'Вы выиграли',
-    'youLose': 'Вы проиграли',
-    'draw': 'Ничья',
-    'more': 'Еще',
-    'result': 'Результат',
-  };
+  const view = {
+    viewLangRUS: {
+      'computer': 'Компьютер',
+      'you': 'Вы',
+      'youWin': 'Вы выиграли',
+      'youLose': 'Вы проиграли',
+      'draw': 'Ничья',
+      'more': 'Еще',
+      'result': 'Результат',
+    },
 
-  const viewLangENG = {
-    'computer': 'Computer',
-    'you': 'You',
-    'youWin': 'You win',
-    'youLose': 'You lose',
-    'draw': 'Draw',
-    'more': 'more',
-    'result': 'Result',
+    viewLangENG: {
+      'computer': 'Computer',
+      'you': 'You',
+      'youWin': 'You win',
+      'youLose': 'You lose',
+      'draw': 'Draw',
+      'more': 'more',
+      'result': 'Result',
+    },
+
+    FIGURES_ENG: ['rock', 'scissors', 'paper'],
+    FIGURES_RUS: ['камень', 'ножницы', 'бумага'],
+
+    langHandler(language) {
+      language = language.toUpperCase();
+      return language === 'EN' || language === 'ENG';
+    },
+
+    set lang(language) {
+      console.log(': ', language);
+      this.lang = this.langHandler(language) ?
+        this.viewLangENG : this.viewLangRUS;
+    },
+
+    get lang() {
+      return this.lang;
+    },
+
+    set figures(language) {
+      console.log(': ', language);
+      this.figures = this.langHandler(language) ?
+        this.FIGURES_ENG : this.FIGURES_RUS;
+    },
+
+    get figures() {
+      return this.figures;
+    },
   };
 
   const getRandomIntInclusive = (min, max) => {
@@ -35,25 +63,26 @@ window.rockPaperScissors = (() => {
       player: 0,
       computer: 0,
     };
-
-    const language = languageSettings.toUpperCase();
-    const lang = language === 'EN' || language === 'ENG' ?
-      FIGURES_ENG : FIGURES_RUS;
-
-    const viewLang = language === 'EN' || language === 'ENG' ?
-      viewLangENG : viewLangRUS;
+    this.lang = languageSettings;
+    console.log(': ', this.lang);
+    this.figures = languageSettings;
+    console.log(': ', this.lang);
 
     const parseResponse = (str) => {
       if (str === null) return null;
       else if (str === '') return undefined;
-      const result = lang.indexOf(lang.find((item) => item.startsWith(str)));
-
+      const result = this.figures.indexOf(this.figures.find((item) => item.startsWith(str)));
       return result === -1 ? undefined : result;
     };
 
     const exitMessage = () => {
-      alert(`${viewLang.result}:\n${viewLang.computer}` +
-        ` - ${result.computer},\n${viewLang.you} - ${result.player}`);
+      alert(`${this.lang.result}:\n${this.lang.computer}` +
+        ` - ${this.result.computer},\n${this.lang.you} - ${this.result.player}`);
+    };
+
+    const resultGameMessage = ([lang, figures, computer, user, gameResult]) => {
+      alert(`${lang.computer}: ${figures[computer]}\n` +
+        `${lang.you}: ${figures[user]}\n${gameResult}`);
     };
 
     return function start() {
@@ -61,7 +90,7 @@ window.rockPaperScissors = (() => {
         const computer = getRandomIntInclusive(0, 2);
         console.log('computer: ', computer);
 
-        let user = parseResponse(prompt(`${lang.join(', ')}?`));
+        let user = parseResponse(prompt(`${this.figures.join(', ')}?`));
         console.log('user: ', user);
 
         switch (true) {
@@ -72,25 +101,21 @@ window.rockPaperScissors = (() => {
             return start();
 
           case computer === user:
-            alert(`${viewLang.computer}: ${lang[computer]}\n` +
-              `${viewLang.you}: ${lang[user]}\n${viewLang.draw}`);
+            resultGameMessage([this.lang, this.figures, computer, user, this.lang.draw]);
             return start();
 
-          case computer === ((user + 1) % lang.length):
-
-            alert(`${viewLang.computer}: ${lang[computer]}\n` +
-              `${viewLang.you}: ${lang[user]}\n${viewLang.youWin}`);
+          case computer === ((user + 1) % this.figures.length):
+            resultGameMessage([this.lang, this.figures, computer, user, this.lang.youWin]);
             result.player += 1;
 
-            user = confirm('Еще?');
+            user = confirm(`${this.lang.more}?`);
             console.log('user: ', user);
             return user ? start() : exitMessage();
 
           default:
-            alert(`${viewLang.computer}: ${lang[computer]}\n` +
-              `${viewLang.you}: ${lang[user]}\n${viewLang.youLose}`);
+            resultGameMessage([this.lang, this.figures, computer, user, this.lang.youLose]);
             result.computer += 1;
-            user = confirm(`${viewLang.more}?`);
+            user = confirm(`${this.lang.more}?`);
             return user ? start() : exitMessage();
         }
       };
