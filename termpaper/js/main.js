@@ -1,4 +1,4 @@
 'use strict';
 
-const startGame = window.rpc();
-startGame();
+const gameStart = window.marbles();
+gameStart();

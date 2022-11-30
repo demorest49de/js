@@ -2,7 +2,7 @@
 
 window.rpc = (() => {
   const view = {
-    VIEWLANG_RUS: {
+    VIEWLANG: {
       'computer': 'Компьютер',
       'you': 'Вы',
       'youWin': 'Ты победил... начинаешь первым',
@@ -10,14 +10,14 @@ window.rpc = (() => {
       'draw': 'Ничья... продолжаем',
     },
 
-    FIGURES_RUS: ['камень', 'ножницы', 'бумага'],
+    FIGURES: ['камень', 'ножницы', 'бумага'],
 
     get lang() {
-      return this.VIEWLANG_RUS;
+      return this.VIEWLANG;
     },
 
     get figures() {
-      return this.FIGURES_RUS;
+      return this.FIGURES;
     },
   };
 
