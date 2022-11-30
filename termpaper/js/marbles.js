@@ -8,13 +8,14 @@ window.marbles = (() => {
       bot: 5,
     };
 
-    const guessing = {
-      bot: false,
+    const firstMove = {
+      player: false,
+      firstMoveRPC: true,
     };
 
     const evenodd = ['четное', 'нечетное'];
 
-    const game = window.rpc();
+    const gameRPC = window.rpc();
     const isNumber = (num) => {
       if (num === '') return undefined;
       if (!Number.isNaN(parseFloat(num)) && isFinite(num)) {
@@ -40,9 +41,20 @@ window.marbles = (() => {
       score.bot = score.bot < 0 ? 0 : score.bot;
       score.player = score.player < 0 ? 0 : score.player;
       score.player = score.player < 0 ? 0 : score.player;
-    }
+    };
 
     return function start() {
+      if (!score.bot || !score.player) {
+        alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
+        const needExit = confirm(`Сыграем еще?`);
+        if (needExit) {
+          return;
+        } else {
+          score.player = 5;//set initial value
+          score.bot = 5;
+          firstMove.firstMoveRPC = true;
+        }
+      }
       const doStart = () => {
 
         const badAnswer = (player) => {
@@ -66,13 +78,17 @@ window.marbles = (() => {
             if (botAnswer === +playerAnswer) {
               score.player -= player;
               score.bot += player;
+              checkAboveZero();
               alert(`Ты проиграл! У тебя ${score.player} шариков`);
               console.log(': ', score);
+              return start();
             } else {
               score.player += player;
               score.bot -= player;
+              checkAboveZero();
               alert(`Ты выиграл! У тебя ${score.player} шариков`);
               console.log(': ', score);
+              return start();
             }
           } else if (!player) {
             badAnswer(player);
@@ -80,10 +96,6 @@ window.marbles = (() => {
         };
 
         const playerGuess = () => {
-          if (!score.bot || !score.player) {
-            alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
-            return;
-          }
 
           const botAnswer = getRandomIntInclusive(1, score.bot);
           console.log('Компьютер загадывает число: ', botAnswer);
@@ -116,17 +128,22 @@ window.marbles = (() => {
               checkAboveZero();
               alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
               return start();
-
           }
         };
 
-        // const isPlayerFirst = game();
-        const isPlayerFirst = false;
-        if (isPlayerFirst) {
+        if (firstMove.firstMoveRPC) {
+          firstMove.player = !!(gameRPC()) ? true : false;
+          firstMove.firstMoveRPC = false;
+        }
+
+        if (firstMove.player) {
+          firstMove.player = false;
           botGuess();
         } else {
+          firstMove.player = true;
           playerGuess();
         }
+
       };
 
       return doStart();
