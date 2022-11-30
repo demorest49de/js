@@ -1,7 +1,6 @@
 'use strict';
 
 window.rpc = (() => {
-
   const view = {
     VIEWLANG_RUS: {
       'computer': 'Компьютер',
@@ -30,14 +29,14 @@ window.rpc = (() => {
   };
 
   const game = () => {
-
     const lang = view.lang;
     const figures = view.figures;
 
     const parseResponse = (str) => {
       if (str === null) return null;
       else if (str === '') return undefined;
-      const result = figures.indexOf(figures.find((item) => item.startsWith(str)));
+      const result = figures.indexOf(
+          figures.find((item) => item.startsWith(str)));
       return result === -1 ? undefined : result;
     };
 
@@ -47,11 +46,11 @@ window.rpc = (() => {
     };
 
     return function start() {
-
       const doStart = () => {
         const computer = getRandomIntInclusive(0, 2);
-        let user = parseResponse(prompt(
-          `${figures.join(', ')}? Тот кто выиграл,
+        console.log(': ', figures[computer]);
+        const user = parseResponse(prompt(
+            `${figures.join(', ')}? Тот кто выиграет,
            тот первый  загадывает число`));
         switch (true) {
           case user === null:
@@ -61,17 +60,18 @@ window.rpc = (() => {
             return start();
 
           case computer === user:
-            resultGameMessage([lang, figures, computer, user, lang.draw]);
+            resultGameMessage([computer, user, lang.draw]);
+
             return start();
           case computer === ((user + 1) % figures.length):
-            resultGameMessage([lang, figures, computer, user, lang.youWin]);
-            return start();
+            resultGameMessage([computer, user, lang.youWin]);
+            return true;
           default:
-            resultGameMessage([lang, figures, computer, user, lang.youLose]);
-            return start();
+            resultGameMessage([computer, user, lang.youLose]);
+            return false;
         }
       };
-      doStart();
+      return doStart();
     };
   };
   return game;

@@ -1,5 +1,4 @@
 'use strict';
 
-const startRPC = window.rpc();
-const result = startRPC();
-console.log(': ', result);
+const startGame = window.rpc();
+startGame();
