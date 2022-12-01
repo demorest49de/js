@@ -121,10 +121,8 @@ window.marbles = (() => {
           console.log('Шарики игрока: ', score.player);
           console.log('Шарики компьютера: ', score.bot);
           let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
-
+          console.log(': ',userAnswer);
           switch (true) {
-            case !userAnswer:
-              return badAnswer([userAnswer, 2]);
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
               checkAboveZero();
