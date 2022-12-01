@@ -54,7 +54,7 @@ window.rpc = (() => {
            тот первый  загадывает число`));
         switch (true) {
           case user === null:
-            return;
+            return null;
           case user === undefined:
             alert(`введите ${figures.join(' или ')} ...`);
             return start();

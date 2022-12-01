@@ -1,27 +1,21 @@
 'use strict';
 
 window.marbles = (() => {
-
   const game = () => {
     const score = {
       player: 5,
       bot: 5,
     };
 
-    const firstMove = {
-      player: false,
-      firstMoveRPC: true,
-    };
-
     const evenodd = ['четное', 'нечетное'];
-
     const gameRPC = window.rpc();
     const isNumber = (num) => {
       if (num === '') return undefined;
+      if (num === null) return null;
       if (!Number.isNaN(parseFloat(num)) && isFinite(num)) {
         return +num;
       }
-      return null;
+      return undefined;
     };
 
     const getRandomIntInclusive = (min, max) => {
@@ -30,7 +24,7 @@ window.marbles = (() => {
       return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
-    const parseResponse = (str) => {
+    const parseString = (str) => {
       if (str === null) return null;
       else if (str === '') return undefined;
       const result = evenodd.indexOf(evenodd.find((item) => item.startsWith(str)));
@@ -43,26 +37,43 @@ window.marbles = (() => {
       score.player = score.player < 0 ? 0 : score.player;
     };
 
+    const addRemoveScore = (value) => {
+      if (value > 0) {
+        score.player += value;
+        score.bot -= value;
+      } else {
+        score.player -= Math.abs(value);
+        score.bot += Math.abs(value);
+      }
+    };
+
     return function start() {
+
+      const playAgain = () => {
+        const wantMore = confirm(`Сыграем еще?`);
+        if (wantMore) {
+          score.player = 5;
+          score.bot = 5;
+          return start();
+        }
+      };
+
       if (!score.bot || !score.player) {
         alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
-        const needExit = confirm(`Сыграем еще?`);
-        if (needExit) {
-          return;
-        } else {
-          score.player = 5;//set initial value
-          score.bot = 5;
-          firstMove.firstMoveRPC = true;
-        }
+        return playAgain();
       }
-      const doStart = () => {
 
-        const badAnswer = (player) => {
+      const doStart = () => {
+        const badAnswer = ([gamerValue, gamerId]) => {
           switch (true) {
-            case player === null:
+            case gamerValue === null:
               return;
-            case player === undefined:
-              return botGuess();
+            case gamerValue === undefined:
+              if (gamerId === 1) {
+                return botGuess();
+              } else if (gamerId === 2) {
+                return playerGuess();
+              }
           }
         };
 
@@ -70,28 +81,36 @@ window.marbles = (() => {
           const botAnswer = getRandomIntInclusive(0, 1);
           console.log(': ', botAnswer);
           const player = isNumber(prompt(`Сколько шариков из ${score.player} вы хотите разыграть?`));
-          console.log(': ', player);
+          console.log('player: ', player);
+          if (player === null) {
+            return playAgain();
+          }
+          if (!player) {
+            return badAnswer([player, 1]);
+          }
+          if (player > score.player || player <= 0) {
+            alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
+            return botGuess();
+          }
 
           if (player && player <= score.player) {
             const playerAnswer = !!(player % 2);
-            console.log('pla, bot: ', !!playerAnswer, !!botAnswer);
+
             if (botAnswer === +playerAnswer) {
-              score.player -= player;
-              score.bot += player;
+              addRemoveScore(-player);
               checkAboveZero();
               alert(`Ты проиграл! У тебя ${score.player} шариков`);
               console.log(': ', score);
               return start();
             } else {
-              score.player += player;
-              score.bot -= player;
+              addRemoveScore(player);
               checkAboveZero();
               alert(`Ты выиграл! У тебя ${score.player} шариков`);
               console.log(': ', score);
               return start();
             }
           } else if (!player) {
-            badAnswer(player);
+            return badAnswer([player, 1]);
           }
         };
 
@@ -101,51 +120,39 @@ window.marbles = (() => {
           console.log('Компьютер загадывает число: ', botAnswer);
           console.log('Шарики игрока: ', score.player);
           console.log('Шарики компьютера: ', score.bot);
-          let userAnswer = parseResponse(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
-          // console.log('!!(userAnswer + 2) % 2: ', !!((userAnswer + 2) % 2));
-          // console.log('!!botAnswer % 2: ', !!(botAnswer % 2));
+          let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
 
           switch (true) {
-            case userAnswer === null:
-              return;
-            case userAnswer === undefined:
-              return playerGuess();
+            case !userAnswer:
+              return badAnswer([userAnswer, 2]);
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
-              score.player += botAnswer;
-              score.bot -= botAnswer;
+              addRemoveScore(botAnswer);
               checkAboveZero();
               alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
               return start();
             case (!(botAnswer % 2) == !((userAnswer + 2) % 2)):
-              score.player += botAnswer;
-              score.bot -= botAnswer;
+              addRemoveScore(botAnswer);
               checkAboveZero();
               alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
               return start();
             default:
-              score.player -= botAnswer;
-              score.bot += botAnswer;
+              addRemoveScore(-botAnswer);
               checkAboveZero();
               alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
               return start();
           }
         };
 
-        if (firstMove.firstMoveRPC) {
-          firstMove.player = !!(gameRPC()) ? true : false;
-          firstMove.firstMoveRPC = false;
-        }
-
-        if (firstMove.player) {
-          firstMove.player = false;
+        const result = gameRPC();
+        if (result === null) {
+          playAgain();
+          return;
+        } else if (result) {
           botGuess();
         } else {
-          firstMove.player = true;
           playerGuess();
         }
-
       };
-
       return doStart();
     };
   };
