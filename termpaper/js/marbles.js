@@ -61,26 +61,25 @@ window.marbles = (() => {
       score.botScore = score.botScore < 0 ? 0 : score.botScore;
     };
 
-    const firstMove = {byPlayer: false};
     return function start() {
 
       const playAgain = () => {
         const wantMore = confirm(`Сыграем еще?`);
         if (wantMore) {
           score.resetValues();
-          firstMove.byPlayer = null;
-          return start();
+          firstMove.firstTime = true;
+          return doStart();
         }
       };
 
       const isNeedExit = () => {
         if (!score.bot || !score.player) {
           alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
-          return playAgain();
+          return true;
         }
+        return false;
       };
-
-      isNeedExit();
+      const firstMove = {firstTime: null};
 
       const doStart = () => {
 
@@ -115,13 +114,12 @@ window.marbles = (() => {
             addRemoveScore(-player);
             alert(`Ты проиграл! У тебя ${score.player} шариков`);
             console.log(': ', score);
-            return playerGuess();
           } else {
             addRemoveScore(player);
             alert(`Ты выиграл! У тебя ${score.player} шариков`);
             console.log(': ', score);
-            return playerGuess();
           }
+          isNeedExit() ? playAgain() : playerGuess();
         };
 
         const playerGuess = () => {
@@ -142,21 +140,29 @@ window.marbles = (() => {
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
               alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-              return botGuess();
             case (!(botAnswer % 2) == !((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
               alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-              return botGuess();
             default:
               addRemoveScore(-botAnswer);
               alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
-              return botGuess();
           }
+          isNeedExit() ? playAgain() : botGuess();
         };
 
-        firstMove.byPlayer ? botGuess() : playerGuess();
+
+
+        // if (firstMove.firstTime) {
+        //   firstMove.firstTime = false;
+        //   const result = gameRPC();
+        //   if (result === null) {
+        //     exitHandler([result, undefined]);
+        //   } else {
+        //     result ? botGuess() : playerGuess();
+        //   }
+        // }
       };
-      if (gameRPC()) firstMove.byPlayer = true;
+      firstMove.firstTime = true;
       return doStart();
     };
   };
