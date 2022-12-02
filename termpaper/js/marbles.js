@@ -44,6 +44,7 @@ window.marbles = (() => {
 
     const parseString = (str) => {
       if (str === null) return null;
+      if (str === '') return undefined;
       const result = evenodd.indexOf(evenodd.find((item) => item.startsWith(str)));
       return result === -1 ? undefined : result;
     };
@@ -85,16 +86,16 @@ window.marbles = (() => {
       const doStart = () => {
 
         const hasExit = ([gamer, gamerId]) => {
-            switch (true) {
-              case gamer === null:
-                return playAgain();
-              case gamer === undefined:
-                if(gamerId === 1){
-                  return botGuess();
-                } else{
-                  return playerGuess();
-                }
-            }
+          switch (true) {
+            case gamer === null:
+              return playAgain();
+            case gamer === undefined:
+              if (gamerId === 1) {
+                return botGuess();
+              } else if (gamerId === 2) {
+                return playerGuess();
+              }
+          }
         };
 
         const botGuess = () => {
@@ -103,7 +104,7 @@ window.marbles = (() => {
           const player = isNumber(prompt(`Сколько шариков из ${score.player} вы хотите разыграть?`));
           console.log('player: ', player);
           if (!player) {
-            hasExit([player, 1])
+            return hasExit([player, 1]);
           }
           if (player > score.player || player <= 0) {
             alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
@@ -140,7 +141,7 @@ window.marbles = (() => {
           console.log(': ', userAnswer);
 
           if (!userAnswer) {
-            hasExit([userAnswer, 1])
+            return hasExit([userAnswer, 2]);
           }
           switch (true) {
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
@@ -161,7 +162,7 @@ window.marbles = (() => {
           }
         };
 
-        playerGuess(); // dlja testa;
+        botGuess(); // dlja testa;
 
         // const result = gameRPC();
         // if (result === null) {
