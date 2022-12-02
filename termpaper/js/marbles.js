@@ -49,11 +49,6 @@ window.marbles = (() => {
       return result === -1 ? undefined : result;
     };
 
-    const checkAboveZero = () => {
-      score.bot = score.bot < 0 ? 0 : score.bot;
-      score.playerScore = score.playerScore < 0 ? 0 : score.playerScore;
-    };
-
     const addRemoveScore = (value) => {
       if (value > 0) {
         score.playerScore += value;
@@ -62,30 +57,34 @@ window.marbles = (() => {
         score.playerScore -= Math.abs(value);
         score.botScore += Math.abs(value);
       }
+      score.playerScore = score.playerScore < 0 ? 0 : score.playerScore;
+      score.botScore = score.botScore < 0 ? 0 : score.botScore;
     };
 
+    const firstMove = {byPlayer: false};
     return function start() {
 
       const playAgain = () => {
         const wantMore = confirm(`Сыграем еще?`);
         if (wantMore) {
           score.resetValues();
+          firstMove.byPlayer = null;
           return start();
         }
       };
 
-      const hasExit = () => {
+      const isNeedExit = () => {
         if (!score.bot || !score.player) {
           alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
           return playAgain();
         }
       };
 
-      hasExit();
+      isNeedExit();
 
       const doStart = () => {
 
-        const hasExit = ([gamer, gamerId]) => {
+        const exitHandler = ([gamer, gamerId]) => {
           switch (true) {
             case gamer === null:
               return playAgain();
@@ -104,7 +103,7 @@ window.marbles = (() => {
           const player = isNumber(prompt(`Сколько шариков из ${score.player} вы хотите разыграть?`));
           console.log('player: ', player);
           if (!player) {
-            return hasExit([player, 1]);
+            return exitHandler([player, 1]);
           }
           if (player > score.player || player <= 0) {
             alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
@@ -114,19 +113,15 @@ window.marbles = (() => {
           const playerAnswer = !!(player % 2);
           if (botAnswer === +playerAnswer) {
             addRemoveScore(-player);
-            checkAboveZero();
             alert(`Ты проиграл! У тебя ${score.player} шариков`);
             console.log(': ', score);
-            return start();
+            return playerGuess();
           } else {
             addRemoveScore(player);
-            checkAboveZero();
             alert(`Ты выиграл! У тебя ${score.player} шариков`);
             console.log(': ', score);
-            return start();
+            return playerGuess();
           }
-
-          // return playerGuess();
         };
 
         const playerGuess = () => {
@@ -140,40 +135,28 @@ window.marbles = (() => {
           let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
           console.log(': ', userAnswer);
 
-          if (!userAnswer) {
-            return hasExit([userAnswer, 2]);
+          if (userAnswer !== 0 && !userAnswer) {
+            return exitHandler([userAnswer, 2]);
           }
           switch (true) {
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
-              checkAboveZero();
               alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-              return start();
+              return botGuess();
             case (!(botAnswer % 2) == !((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
-              checkAboveZero();
               alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-              return start();
+              return botGuess();
             default:
               addRemoveScore(-botAnswer);
-              checkAboveZero();
               alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
-              return start();
+              return botGuess();
           }
         };
 
-        botGuess(); // dlja testa;
-
-        // const result = gameRPC();
-        // if (result === null) {
-        //   playAgain();
-        //   return;
-        // } else if (result) {
-        //   botGuess();
-        // } else {
-        //   playerGuess();
-        // }
+        firstMove.byPlayer ? botGuess() : playerGuess();
       };
+      if (gameRPC()) firstMove.byPlayer = true;
       return doStart();
     };
   };
