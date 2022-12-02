@@ -44,7 +44,6 @@ window.marbles = (() => {
 
     const parseString = (str) => {
       if (str === null) return null;
-      else if (str === '') return undefined;
       const result = evenodd.indexOf(evenodd.find((item) => item.startsWith(str)));
       return result === -1 ? undefined : result;
     };
@@ -64,13 +63,6 @@ window.marbles = (() => {
       }
     };
 
-    const hasExit = () => {
-      if (!score.bot || !score.player) {
-        alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
-        return playAgain();
-      }
-    };
-
     return function start() {
 
       const playAgain = () => {
@@ -81,9 +73,29 @@ window.marbles = (() => {
         }
       };
 
+      const hasExit = () => {
+        if (!score.bot || !score.player) {
+          alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
+          return playAgain();
+        }
+      };
+
       hasExit();
 
       const doStart = () => {
+
+        const hasExit = ([gamer, gamerId]) => {
+            switch (true) {
+              case gamer === null:
+                return playAgain();
+              case gamer === undefined:
+                if(gamerId === 1){
+                  return botGuess();
+                } else{
+                  return playerGuess();
+                }
+            }
+        };
 
         const botGuess = () => {
           const botAnswer = getRandomIntInclusive(0, 1);
@@ -91,14 +103,8 @@ window.marbles = (() => {
           const player = isNumber(prompt(`Сколько шариков из ${score.player} вы хотите разыграть?`));
           console.log('player: ', player);
           if (!player) {
-            switch (true) {
-              case player === null:
-                return playAgain();
-              case player === undefined:
-                return botGuess();
-            }
+            hasExit([player, 1])
           }
-
           if (player > score.player || player <= 0) {
             alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
             return botGuess();
@@ -124,12 +130,18 @@ window.marbles = (() => {
 
         const playerGuess = () => {
 
-          const botAnswer = getRandomIntInclusive(1, score.bot);
+          const botAnswer = getRandomIntInclusive(1, score.botScore);
+
           console.log('Компьютер загадывает число: ', botAnswer);
-          console.log('Шарики игрока: ', score.player);
-          console.log('Шарики компьютера: ', score.bot);
+          console.log('Шарики игрока: ', score.playerScore);
+          console.log('Шарики компьютера: ', score.botScore);
+
           let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
           console.log(': ', userAnswer);
+
+          if (!userAnswer) {
+            hasExit([userAnswer, 1])
+          }
           switch (true) {
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
@@ -149,7 +161,7 @@ window.marbles = (() => {
           }
         };
 
-        botGuess(); // dlja testa;
+        playerGuess(); // dlja testa;
 
         // const result = gameRPC();
         // if (result === null) {
