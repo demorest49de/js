@@ -3,14 +3,32 @@
 window.marbles = (() => {
   const game = () => {
     const score = {
-      player: 5,
-      bot: 5,
-    };
+        player: 5,
+        bot: 5,
+
+        get playerScore() {
+          return this.player;
+        },
+        get botScore() {
+          return this.bot;
+        },
+        set playerScore(value) {
+          this.player = value;
+        },
+        set botScore(value) {
+          this.bot = value;
+        },
+        resetValues() {
+          this.player = 5;
+          this.bot = 5;
+        }
+      }
+    ;
 
     const evenodd = ['четное', 'нечетное'];
     const gameRPC = window.rpc();
+
     const isNumber = (num) => {
-      if (num === '') return undefined;
       if (num === null) return null;
       if (!Number.isNaN(parseFloat(num)) && isFinite(num)) {
         return +num;
@@ -33,17 +51,23 @@ window.marbles = (() => {
 
     const checkAboveZero = () => {
       score.bot = score.bot < 0 ? 0 : score.bot;
-      score.player = score.player < 0 ? 0 : score.player;
-      score.player = score.player < 0 ? 0 : score.player;
+      score.playerScore = score.playerScore < 0 ? 0 : score.playerScore;
     };
 
     const addRemoveScore = (value) => {
       if (value > 0) {
-        score.player += value;
-        score.bot -= value;
+        score.playerScore += value;
+        score.botScore -= value;
       } else {
-        score.player -= Math.abs(value);
-        score.bot += Math.abs(value);
+        score.playerScore -= Math.abs(value);
+        score.botScore += Math.abs(value);
+      }
+    };
+
+    const hasExit = () => {
+      if (!score.bot || !score.player) {
+        alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
+        return playAgain();
       }
     };
 
@@ -52,66 +76,50 @@ window.marbles = (() => {
       const playAgain = () => {
         const wantMore = confirm(`Сыграем еще?`);
         if (wantMore) {
-          score.player = 5;
-          score.bot = 5;
+          score.resetValues();
           return start();
         }
       };
 
-      if (!score.bot || !score.player) {
-        alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
-        return playAgain();
-      }
+      hasExit();
 
       const doStart = () => {
-        const badAnswer = ([gamerValue, gamerId]) => {
-          switch (true) {
-            case gamerValue === null:
-              return;
-            case gamerValue === undefined:
-              if (gamerId === 1) {
-                return botGuess();
-              } else if (gamerId === 2) {
-                return playerGuess();
-              }
-          }
-        };
 
         const botGuess = () => {
           const botAnswer = getRandomIntInclusive(0, 1);
-          console.log(': ', botAnswer);
+          console.log('botAnswer: ', botAnswer);
           const player = isNumber(prompt(`Сколько шариков из ${score.player} вы хотите разыграть?`));
           console.log('player: ', player);
-          if (player === null) {
-            return playAgain();
-          }
           if (!player) {
-            return badAnswer([player, 1]);
+            switch (true) {
+              case player === null:
+                return playAgain();
+              case player === undefined:
+                return botGuess();
+            }
           }
+
           if (player > score.player || player <= 0) {
             alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
             return botGuess();
           }
 
-          if (player && player <= score.player) {
-            const playerAnswer = !!(player % 2);
-
-            if (botAnswer === +playerAnswer) {
-              addRemoveScore(-player);
-              checkAboveZero();
-              alert(`Ты проиграл! У тебя ${score.player} шариков`);
-              console.log(': ', score);
-              return start();
-            } else {
-              addRemoveScore(player);
-              checkAboveZero();
-              alert(`Ты выиграл! У тебя ${score.player} шариков`);
-              console.log(': ', score);
-              return start();
-            }
-          } else if (!player) {
-            return badAnswer([player, 1]);
+          const playerAnswer = !!(player % 2);
+          if (botAnswer === +playerAnswer) {
+            addRemoveScore(-player);
+            checkAboveZero();
+            alert(`Ты проиграл! У тебя ${score.player} шариков`);
+            console.log(': ', score);
+            return start();
+          } else {
+            addRemoveScore(player);
+            checkAboveZero();
+            alert(`Ты выиграл! У тебя ${score.player} шариков`);
+            console.log(': ', score);
+            return start();
           }
+
+          // return playerGuess();
         };
 
         const playerGuess = () => {
@@ -121,7 +129,7 @@ window.marbles = (() => {
           console.log('Шарики игрока: ', score.player);
           console.log('Шарики компьютера: ', score.bot);
           let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
-          console.log(': ',userAnswer);
+          console.log(': ', userAnswer);
           switch (true) {
             case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
               addRemoveScore(botAnswer);
@@ -141,15 +149,17 @@ window.marbles = (() => {
           }
         };
 
-        const result = gameRPC();
-        if (result === null) {
-          playAgain();
-          return;
-        } else if (result) {
-          botGuess();
-        } else {
-          playerGuess();
-        }
+        botGuess(); // dlja testa;
+
+        // const result = gameRPC();
+        // if (result === null) {
+        //   playAgain();
+        //   return;
+        // } else if (result) {
+        //   botGuess();
+        // } else {
+        //   playerGuess();
+        // }
       };
       return doStart();
     };
