@@ -73,8 +73,8 @@ window.marbles = (() => {
       };
 
       const isNeedExit = () => {
-        if (!score.bot || !score.player) {
-          alert(`Игра окончена! ${!score.bot ? 'Вы победили' : 'Вы проиграли'}`);
+        if (!score.botScore || !score.playerScore) {
+          alert(`Игра окончена! ${!score.botScore ? 'Вы победили' : 'Вы проиграли'}`);
           return true;
         }
         return false;
@@ -104,7 +104,7 @@ window.marbles = (() => {
           if (!player) {
             return exitHandler([player, 1]);
           }
-          if (player > score.player || player <= 0) {
+          if (player > score.playerScore || player <= 0) {
             alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
             return botGuess();
           }
@@ -119,7 +119,7 @@ window.marbles = (() => {
             alert(`Ты выиграл! У тебя ${score.player} шариков`);
             console.log(': ', score);
           }
-          isNeedExit() ? playAgain() : playerGuess();
+          return isNeedExit() ? playAgain() : playerGuess();
         };
 
         const playerGuess = () => {
@@ -129,7 +129,7 @@ window.marbles = (() => {
           console.log('Компьютер загадывает число: ', botAnswer);
           console.log('Шарики игрока: ', score.playerScore);
           console.log('Шарики компьютера: ', score.botScore);
-
+          debugger;
           let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
           console.log(': ', userAnswer);
 
@@ -147,11 +147,13 @@ window.marbles = (() => {
               addRemoveScore(-botAnswer);
               alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
           }
-          isNeedExit() ? playAgain() : botGuess();
+          return isNeedExit() ? playAgain() : botGuess();
         };
-
-
-
+        if (firstMove.firstTime) {
+          firstMove.firstTime = false;
+          const resulted = getRandomIntInclusive(0, 1);
+          resulted ? botGuess() : playerGuess();
+        }
         // if (firstMove.firstTime) {
         //   firstMove.firstTime = false;
         //   const result = gameRPC();
