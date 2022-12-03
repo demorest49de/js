@@ -3,27 +3,27 @@
 window.marbles = (() => {
   const game = () => {
     const score = {
-        player: 5,
-        bot: 5,
+      player: 5,
+      bot: 5,
 
-        get playerScore() {
-          return this.player;
-        },
-        get botScore() {
-          return this.bot;
-        },
-        set playerScore(value) {
-          this.player = value;
-        },
-        set botScore(value) {
-          this.bot = value;
-        },
-        resetValues() {
-          this.player = 5;
-          this.bot = 5;
-        }
+      get playerScore() {
+        return this.player;
+      },
+      get botScore() {
+        return this.bot;
+      },
+      set playerScore(value) {
+        this.player = value;
+      },
+      set botScore(value) {
+        this.bot = value;
+      },
+      resetValues() {
+        this.player = 5;
+        this.bot = 5;
       }
-    ;
+    };
+
     const evenodd = ['четное', 'нечетное'];
 
     const isNumber = (num) => {
@@ -127,7 +127,6 @@ window.marbles = (() => {
         };
 
         const playerGuess = () => {
-
           const botAnswer = getRandomIntInclusive(1, score.botScore);
           console.log('Компьютер загадывает число: ', botAnswer);
           console.log('Шарики игрока: ', score.playerScore);
