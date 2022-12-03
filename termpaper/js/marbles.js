@@ -24,9 +24,7 @@ window.marbles = (() => {
         }
       }
     ;
-
     const evenodd = ['четное', 'нечетное'];
-    const gameRPC = window.rpc();
 
     const isNumber = (num) => {
       if (num === null) return null;
@@ -63,25 +61,32 @@ window.marbles = (() => {
 
     return function start() {
 
-      const playAgain = () => {
-        const wantMore = confirm(`Сыграем еще?`);
-        if (wantMore) {
-          score.resetValues();
-          firstMove.firstTime = true;
-          return doStart();
-        }
-      };
-
       const isNeedExit = () => {
         if (!score.botScore || !score.playerScore) {
-          alert(`Игра окончена! ${!score.botScore ? 'Вы победили' : 'Вы проиграли'}`);
+          alert(`Игра окончена! ${!score.botScore ? 'Ты победил!' : 'Ты проиграл!'}`);
           return true;
         }
         return false;
       };
-      const firstMove = {firstTime: null};
+      const gameRPC = window.rpc();
 
-      const doStart = () => {
+      const doStart = (firstMove) => {
+        const chooseFirstMove = () => {
+          if (firstMove === null) {
+            return;
+          } else if (firstMove) {
+            return playerGuess();
+          } else if (!firstMove) {
+            return botGuess();
+          }
+        };
+
+        const playAgain = () => {
+          if (confirm(`Сыграем еще?`)) {
+            score.resetValues();
+            return doStart(gameRPC());
+          }
+        };
 
         const exitHandler = ([gamer, gamerId]) => {
           switch (true) {
@@ -98,26 +103,25 @@ window.marbles = (() => {
 
         const botGuess = () => {
           const botAnswer = getRandomIntInclusive(0, 1);
-          console.log('botAnswer: ', botAnswer);
-          const player = isNumber(prompt(`Сколько шариков из ${score.player} вы хотите разыграть?`));
-          console.log('player: ', player);
+          console.log('Игрок загадывает число: ', evenodd[botAnswer]);
+          const player = isNumber(prompt(`Сколько шариков из ${score.player} ты хочешь разыграть?`));
+
+          console.log('Шарики игрока: ', score.playerScore);
+          console.log('Шарики компьютера: ', score.botScore);
           if (!player) {
             return exitHandler([player, 1]);
           }
           if (player > score.playerScore || player <= 0) {
-            alert(`Ошибка! Вы можете разыграть ${score.player} шариков. Попробуйте еще раз`);
+            alert(`Ошибка! Ты можешь разыграть ${score.player} шариков. Попробуйте еще раз`);
             return botGuess();
           }
-
           const playerAnswer = !!(player % 2);
           if (botAnswer === +playerAnswer) {
             addRemoveScore(-player);
             alert(`Ты проиграл! У тебя ${score.player} шариков`);
-            console.log(': ', score);
           } else {
             addRemoveScore(player);
             alert(`Ты выиграл! У тебя ${score.player} шариков`);
-            console.log(': ', score);
           }
           return isNeedExit() ? playAgain() : playerGuess();
         };
@@ -125,47 +129,26 @@ window.marbles = (() => {
         const playerGuess = () => {
 
           const botAnswer = getRandomIntInclusive(1, score.botScore);
-
           console.log('Компьютер загадывает число: ', botAnswer);
           console.log('Шарики игрока: ', score.playerScore);
           console.log('Шарики компьютера: ', score.botScore);
-          debugger;
           let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
-          console.log(': ', userAnswer);
-
           if (userAnswer !== 0 && !userAnswer) {
             return exitHandler([userAnswer, 2]);
           }
-          switch (true) {
-            case (!!(botAnswer % 2) == !!((userAnswer + 2) % 2)):
-              addRemoveScore(botAnswer);
-              alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-            case (!(botAnswer % 2) == !((userAnswer + 2) % 2)):
-              addRemoveScore(botAnswer);
-              alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-            default:
-              addRemoveScore(-botAnswer);
-              alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
+          if (!!(botAnswer % 2) === !!((userAnswer + 2) % 2)) {
+            addRemoveScore(botAnswer);
+            alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
+          } else {
+            addRemoveScore(-botAnswer);
+            alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
           }
           return isNeedExit() ? playAgain() : botGuess();
         };
-        if (firstMove.firstTime) {
-          firstMove.firstTime = false;
-          const resulted = getRandomIntInclusive(0, 1);
-          resulted ? botGuess() : playerGuess();
-        }
-        // if (firstMove.firstTime) {
-        //   firstMove.firstTime = false;
-        //   const result = gameRPC();
-        //   if (result === null) {
-        //     exitHandler([result, undefined]);
-        //   } else {
-        //     result ? botGuess() : playerGuess();
-        //   }
-        // }
+
+        return chooseFirstMove(firstMove);
       };
-      firstMove.firstTime = true;
-      return doStart();
+      return doStart(gameRPC());
     };
   };
   return game;
