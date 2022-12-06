@@ -3,8 +3,10 @@
 window.marbles = (() => {
   const game = () => {
     const score = {
-      player: 5,
-      bot: 5,
+      initialPlayer: 5,
+      initialBot: 5,
+      player: 1,
+      bot: 9,
 
       get playerScore() {
         return this.player;
@@ -18,9 +20,9 @@ window.marbles = (() => {
       set botScore(value) {
         this.bot = value;
       },
-      resetValues() {
-        this.player = 5;
-        this.bot = 5;
+      resetScoreValues() {
+        this.player = this.initialPlayer;
+        this.bot = this.initialBot;
       }
     };
 
@@ -40,11 +42,8 @@ window.marbles = (() => {
       return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
-    const parseString = (str) => {
-      if (str === null) return null;
-      if (str === '') return undefined;
-      const result = evenodd.indexOf(evenodd.find((item) => item.startsWith(str)));
-      return result === -1 ? undefined : result;
+    const parseAnswer = (str) => {
+      return str ? 0 : 1;
     };
 
     const addRemoveScore = (value) => {
@@ -55,8 +54,12 @@ window.marbles = (() => {
         score.playerScore -= Math.abs(value);
         score.botScore += Math.abs(value);
       }
+
       score.playerScore = score.playerScore < 0 ? 0 : score.playerScore;
       score.botScore = score.botScore < 0 ? 0 : score.botScore;
+      const maxGamerPoints = score.initialPlayer + score.initialBot;
+      score.playerScore = score.playerScore > maxGamerPoints ? maxGamerPoints : score.playerScore;
+      score.botScore = score.botScore > maxGamerPoints ? maxGamerPoints : score.botScore;
     };
 
     return function start() {
@@ -83,8 +86,9 @@ window.marbles = (() => {
 
         const playAgain = () => {
           if (confirm(`Сыграем еще?`)) {
-            score.resetValues();
-            return doStart(gameRPC());
+            score.resetScoreValues();
+            // return doStart(gameRPC());
+            return doStart(false);
           }
         };
 
@@ -103,8 +107,17 @@ window.marbles = (() => {
 
         const botGuess = () => {
           const botAnswer = getRandomIntInclusive(0, 1);
-          console.log('Игрок загадывает число: ', evenodd[botAnswer]);
-          const player = isNumber(prompt(`Сколько шариков из ${score.player} ты хочешь разыграть?`));
+          console.log('Бот загадывает число: ', evenodd[botAnswer]);
+          const message = score.playerScore === 1 ? `Вы хотите разыграть последний шар?`
+            : `Сколько шариков из ${score.playerScore} ты хочешь разыграть?`;
+          const result = score.playerScore === 1 ? confirm(message) : prompt(message);
+          let player = null;
+
+          if (typeof (result) === 'boolean') {
+            player = result ? 1 : null;
+          } else  {
+            player = isNumber(result);
+          }
 
           console.log('Шарики игрока: ', score.playerScore);
           console.log('Шарики компьютера: ', score.botScore);
@@ -131,10 +144,8 @@ window.marbles = (() => {
           console.log('Компьютер загадывает число: ', botAnswer);
           console.log('Шарики игрока: ', score.playerScore);
           console.log('Шарики компьютера: ', score.botScore);
-          let userAnswer = parseString(prompt(`Отгадайте: ${evenodd.join(' или ')}?`));
-          if (userAnswer !== 0 && !userAnswer) {
-            return exitHandler([userAnswer, 2]);
-          }
+          let userAnswer = parseAnswer(confirm(`Отгадайте: ${evenodd.join(' или ')}?`));
+          console.log('Игрок выбирает : ', evenodd[userAnswer]);
           if (!!(botAnswer % 2) === !!((userAnswer + 2) % 2)) {
             addRemoveScore(botAnswer);
             alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
@@ -147,7 +158,8 @@ window.marbles = (() => {
 
         return chooseFirstMove(firstMove);
       };
-      return doStart(gameRPC());
+      return doStart(false);
+      // return doStart(gameRPC());
     };
   };
   return game;
