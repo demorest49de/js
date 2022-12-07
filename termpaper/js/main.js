@@ -1,4 +1,3 @@
 'use strict';
 
-const marblesStart = window.marbles();
-marblesStart();
+window.marbles()();
