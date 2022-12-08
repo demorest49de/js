@@ -11,12 +11,12 @@ window.marbles = (() => {
       switchUser() {
         this.current = +!this.current;
       },
-      showResult(){
-        alert(`Вы победили! 
+      showResult(message) {
+        alert(`${message}! 
         \n${ide.score[0]} - бот
         \n${ide.score[1]} - игрок`);
       },
-      changeScore(value){
+      changeScore(value) {
         if (value > 0) {
           this.score[1] += value;
           this.score[0] -= value;
@@ -24,11 +24,10 @@ window.marbles = (() => {
           this.score[0] -= Math.abs(value);
           this.score[1] += Math.abs(value);
         }
-      }
+      },
     };
 
     const evenOdd = ['четное', 'нечетное'];
-
     const getRandomIntInclusive = (min, max) => {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -36,19 +35,20 @@ window.marbles = (() => {
     };
 
     return function start() {
-      ide.switchUser();
-
       const askForBalls = (balls) => {
         const answer = prompt(`Сколько шариков из ${balls} ты хочешь разыграть?`);
-        checkFaultsOrExit();
+        checkFaultsOrExit(answer);
         if (answer > ide.score[ide.current] || answer <= 0) {
           alert(`Ошибка! Ты можешь разыграть ${ide.score[ide.current]} шариков. Попробуйте еще раз`);
-          return restart();
+          return start();
         }
         const random = getRandomIntInclusive(1, ide.score[ide.current]);
-        if(+answer === random){
-
-          ide.showResult();
+        if (+answer !== random) {
+          ide.changeScore(+answer);
+          ide.showResult('Вы победили');
+        } else {
+          ide.changeScore(-(+answer));
+          ide.showResult('Вы проиграли');
         }
       };
 
@@ -59,20 +59,32 @@ window.marbles = (() => {
 
       const checkFaultsOrExit = (answer) => {
         if (answer === null) {
-          return confirm('Хотите сыграть еще?') ? restart() : null;
+          return confirm('Хотите сыграть еще?') ? start() : null;
         }
         if (isNaN(+answer) && !isFinite(+answer) || answer.length === 0) {
-          return restart();
+          return start();
         }
       };
 
-      //заменить на while
-      const restart = () => {
-        ide.current ? askForBalls(ide.score[ide.current])
-          : askForParity();
+      const hasExit = () => {
+        const [x, y] = ide.score;
+        if (!x || !y) {
+          const message = `Игра окончена. ${x === 0 ? 'Вы победили!' : 'Вы проиграли!' +
+            '\n${ide.score[0]} - бот' +
+            '\n${ide.score[1]} - игрок'} `;
+          alert(message);
+        }
       };
-      restart();
+
+      do {
+        ide.switchUser();
+        // ide.current ? askForBalls(ide.score[ide.current])
+        //   : askForParity(ide.score[ide.current]);
+        askForBalls(ide.score[ide.current]);
+      } while (!hasExit());
+
     };
   };
   return game;
-})();
+})
+();
