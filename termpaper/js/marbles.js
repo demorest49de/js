@@ -4,8 +4,8 @@ window.marbles = (() => {
 
   const game = () => {
     const ide = {
-      bot: 'первый',
-      user: 'второй',
+      bot: 0,
+      user: 1,
       score: [5, 5],
       current: 0,
       switchUser() {
@@ -18,13 +18,23 @@ window.marbles = (() => {
       },
       changeScore(value) {
         if (value > 0) {
-          this.score[1] += value;
-          this.score[0] -= value;
+          this.score[this.user] += value;
+          this.score[this.bot] -= value;
         } else {
-          this.score[0] -= Math.abs(value);
-          this.score[1] += Math.abs(value);
+          this.score[this.bot] -= Math.abs(value);
+          this.score[this.user] += Math.abs(value);
+        }
+        for (let i = 0; i < this.score.length; i++) {
+          this.checkGamerScore(i);
         }
       },
+      checkGamerScore(index) {
+        this.score[index] = this.score[index] < 0 ? 0
+          : this.score[index] > 10 ? 10 : this.score[index];
+      },
+      resetScore() {
+        this.score = [5, 5];
+      }
     };
 
     const evenOdd = ['четное', 'нечетное'];
@@ -73,6 +83,7 @@ window.marbles = (() => {
             '\n${ide.score[0]} - бот' +
             '\n${ide.score[1]} - игрок'} `;
           alert(message);
+          ide.resetScore();
         }
       };
 
@@ -82,7 +93,6 @@ window.marbles = (() => {
         //   : askForParity(ide.score[ide.current]);
         askForBalls(ide.score[ide.current]);
       } while (!hasExit());
-
     };
   };
   return game;
