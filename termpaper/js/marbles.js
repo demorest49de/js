@@ -2,27 +2,18 @@
 
 window.marbles = (() => {
   const game = () => {
-    const score = {
-      initialPlayer: 5,
-      initialBot: 5,
-      player: 1,
-      bot: 9,
-
-      get playerScore() {
-        return this.player;
+    const ide = {
+      minValue: 0,
+      maxValue: 10,
+      current: 0,
+      bot: 5,
+      player: 5,
+      score: [this.bot, this.player],
+      switchUser() {
+        this.current = +!this.current;
       },
-      get botScore() {
-        return this.bot;
-      },
-      set playerScore(value) {
-        this.player = value;
-      },
-      set botScore(value) {
-        this.bot = value;
-      },
-      resetScoreValues() {
-        this.player = this.initialPlayer;
-        this.bot = this.initialBot;
+      resetScore() {
+        this.score = [5, 5];
       }
     };
 
@@ -42,124 +33,62 @@ window.marbles = (() => {
       return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
-    const parseAnswer = (str) => {
-      return str ? 0 : 1;
-    };
-
     const addRemoveScore = (value) => {
       if (value > 0) {
-        score.playerScore += value;
-        score.botScore -= value;
+        ide.bot -= value;
+        ide.player += value;
       } else {
-        score.playerScore -= Math.abs(value);
-        score.botScore += Math.abs(value);
+        ide.bot += Math.abs(value);
+        ide.player -= Math.abs(value);
       }
+      checkConstraints(ide.score);
+    };
 
-      score.playerScore = score.playerScore < 0 ? 0 : score.playerScore;
-      score.botScore = score.botScore < 0 ? 0 : score.botScore;
-      const maxGamerPoints = score.initialPlayer + score.initialBot;
-      score.playerScore = score.playerScore > maxGamerPoints ? maxGamerPoints : score.playerScore;
-      score.botScore = score.botScore > maxGamerPoints ? maxGamerPoints : score.botScore;
+    const checkConstraints = (score) => {
+      for (let i = 0; i < score.length; i++) {
+        ide.score[i] = ide.score[i] < ide.minValue ? ide.minValue
+          : ide.score[i] > ide.maxValue ? ide.maxValue : ide.score[i];
+      }
     };
 
     return function start() {
-
-      const isNeedExit = () => {
-        if (!score.botScore || !score.playerScore) {
-          alert(`Игра окончена! ${!score.botScore ? 'Ты победил!' : 'Ты проиграл!'}`);
-          return true;
+      const nextTurn = () => {
+        const answer = prompt(`Сколько шариков из ${balls} ты хочешь разыграть?`);
+        checkFaultsOrExit(answer);
+        if (answer > ide.score[ide.current] || answer <= 0) {
+          alert(`Ошибка! Ты можешь разыграть ${ide.score[ide.current]} шариков. Попробуйте еще раз`);
+          return start();
         }
-        return false;
+        const random = getRandomIntInclusive(1, ide.score[ide.current]);
+        if (+answer !== random) {
+          ide.changeScore(+answer);
+          ide.showResult('Вы победили');
+        } else {
+          ide.changeScore(-(+answer));
+          ide.showResult('Вы проиграли');
+        }
       };
-      const gameRPC = window.rpc();
 
-      const doStart = (firstMove) => {
-        const chooseFirstMove = () => {
-          if (firstMove === null) {
-            return;
-          } else if (firstMove) {
-            return playerGuess();
-          } else if (!firstMove) {
-            return botGuess();
-          }
-        };
-
-        const playAgain = () => {
-          if (confirm(`Сыграем еще?`)) {
-            score.resetScoreValues();
-            // return doStart(gameRPC());
-            return doStart(false);
-          }
-        };
-
-        const exitHandler = ([gamer, gamerId]) => {
-          switch (true) {
-            case gamer === null:
-              return playAgain();
-            case gamer === undefined:
-              if (gamerId === 1) {
-                return botGuess();
-              } else if (gamerId === 2) {
-                return playerGuess();
-              }
-          }
-        };
-
-        const botGuess = () => {
-          const botAnswer = getRandomIntInclusive(0, 1);
-          console.log('Бот загадывает число: ', evenodd[botAnswer]);
-          const message = score.playerScore === 1 ? `Вы хотите разыграть последний шар?`
-            : `Сколько шариков из ${score.playerScore} ты хочешь разыграть?`;
-          const result = score.playerScore === 1 ? confirm(message) : prompt(message);
-          let player = null;
-
-          if (typeof (result) === 'boolean') {
-            player = result ? 1 : null;
-          } else  {
-            player = isNumber(result);
-          }
-
-          console.log('Шарики игрока: ', score.playerScore);
-          console.log('Шарики компьютера: ', score.botScore);
-          if (!player) {
-            return exitHandler([player, 1]);
-          }
-          if (player > score.playerScore || player <= 0) {
-            alert(`Ошибка! Ты можешь разыграть ${score.player} шариков. Попробуйте еще раз`);
-            return botGuess();
-          }
-          const playerAnswer = !!(player % 2);
-          if (botAnswer === +playerAnswer) {
-            addRemoveScore(-player);
-            alert(`Ты проиграл! У тебя ${score.player} шариков`);
+      const hasExit = () => {
+        const [x, y] = ide.score;
+        if (!x || !y) {
+          const message = `Игра окончена. ${x === 0 ? 'Вы победили!' : 'Вы проиграли!' +
+            `\n${ide.bot} - бот` +
+            `\n${ide.player} - игрок`} `;
+          alert(message);
+          if (confirm(`Хотите сыграть еще?`)) {
+            ide.resetScore();
+            return false;
           } else {
-            addRemoveScore(player);
-            alert(`Ты выиграл! У тебя ${score.player} шариков`);
+            return true;
           }
-          return isNeedExit() ? playAgain() : playerGuess();
-        };
+        }
 
-        const playerGuess = () => {
-          const botAnswer = getRandomIntInclusive(1, score.botScore);
-          console.log('Компьютер загадывает число: ', botAnswer);
-          console.log('Шарики игрока: ', score.playerScore);
-          console.log('Шарики компьютера: ', score.botScore);
-          let userAnswer = parseAnswer(confirm(`Отгадайте: ${evenodd.join(' или ')}?`));
-          console.log('Игрок выбирает : ', evenodd[userAnswer]);
-          if (!!(botAnswer % 2) === !!((userAnswer + 2) % 2)) {
-            addRemoveScore(botAnswer);
-            alert(`Ты выиграл! У тебя осталось ${score.player} шариков`);
-          } else {
-            addRemoveScore(-botAnswer);
-            alert(`Ты проиграл! У тебя осталось ${score.player} шариков`);
-          }
-          return isNeedExit() ? playAgain() : botGuess();
-        };
-
-        return chooseFirstMove(firstMove);
+        do {
+          ide.switchUser();
+          nextTurn();
+        } while (!hasExit());
       };
-      return doStart(false);
-      // return doStart(gameRPC());
     };
   };
   return game;
