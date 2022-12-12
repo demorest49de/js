@@ -50,6 +50,16 @@ window.marbles = (() => {
     return function start() {
 
       const nextTurn = () => {
+        const handleResult = (answer, random, points = 0) => {
+          if (answer === random) {
+            ide.changeScore(points);
+            ide.showResult(`Вы победили. Вы выиграли ${points} шариков`);
+          } else {
+            ide.changeScore(-points);
+            ide.showResult(`Вы проиграли Вы проиграли ${points} шариков`);
+          }
+        };
+
         let answer = null;
         const random = getRandomIntInclusive(1, ide.score[ide.current]);
         if (ide.current === 1) {
@@ -62,28 +72,22 @@ window.marbles = (() => {
             alert(`Ошибка! Ты можешь разыграть ${ide.score[1]} шариков. Попробуйте еще раз`);
             return nextTurn();
           }
+          // проверка на четность
+          handleResult(+!(answer % 2), +!(random % 2), +answer);
         } else {
           answer = confirm(`Отгадайте: ${evenOdd.join(' или ')}?`);
           console.log('bot, user: ', random, +answer);
           // проверка на четность
+          handleResult(+answer, +!(random % 2), random);
         }
         hasExit();
-        if (+answer === random) {
-          alert(`Ничья!`);
-          return nextTurn();
-        } else if (+answer !== random) {
-          ide.changeScore(answer);
-          ide.showResult('Вы победили');
-        } else {
-          ide.changeScore(-(+answer));
-          ide.showResult('Вы проиграли');
-        }
       };
 
       const wantPlayAgain = () => {
         if (confirm(`Хотите сыграть еще?`)) {
           ide.resetScore();
-          ide.current = +window.rpc();
+          // ide.current = +window.rpc()();
+          ide.current = +!ide.current;//удалить
         } else {
           ide.goExit = true;
         }
@@ -110,12 +114,14 @@ window.marbles = (() => {
         }
       };
       do {
-        if (ide.current < 0) {
-          ide.current = +window.rpc()();
-          console.log('ide.score: ', ide.score);
-        } else {
-          ide.switchUser();
-        }
+        // if (ide.current < 0) {
+        //   ide.current = +window.rpc()();
+        //   console.log('ide.score: ', ide.score);
+        // } else {
+        //   ide.switchUser();
+        // }
+        // nextTurn();
+        ide.current = 1;//удалить
         nextTurn();
       } while (!ide.goExit);
     };
