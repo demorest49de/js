@@ -123,14 +123,6 @@ window.marbles = (() => {
             ide.switchUser();
             break;
         }
-        // if (ide.current < 0) {
-        //   ide.current = +window.rpc()();
-        //   console.log('ide.score: ', ide.score);
-        // } else if (ide.skipOneTurn) {
-        //   ide.skipOneTurn = false;
-        // } else if (!ide.skipOneTurn) {
-        //   ide.switchUser();
-        // }
         nextTurn();
       } while (!ide.goExit);
     };
