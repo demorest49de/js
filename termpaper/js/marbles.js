@@ -4,11 +4,10 @@ window.marbles = (() => {
   const game = () => {
     const ide = {
       goExit: false,
+      skipOneTurn: false,
       minValue: 0,
       maxValue: 10,
       current: -1,
-      bot: 0,
-      player: 1,
       score: [5, 5],
       switchUser() {
         this.current = +!this.current;
@@ -26,8 +25,8 @@ window.marbles = (() => {
           ide.score[0] -= value;
           ide.score[1] += value;
         } else {
-          ide.score[1] += Math.abs(value);
-          ide.score[0] -= Math.abs(value);
+          ide.score[0] += Math.abs(value);
+          ide.score[1] -= Math.abs(value);
         }
         checkScoreConstraints();
       },
@@ -41,9 +40,9 @@ window.marbles = (() => {
       }
     };
 
-    const getRandomIntInclusive = (min, max) => {
-      min = Math.ceil(min);
-      max = Math.floor(max);
+    const getRandomIntInclusive = () => {
+      const min = Math.ceil(ide.current === 1 ? 1 : 1);
+      const max = Math.floor(ide.current === 1 ? 2 : ide.score[ide.current]);
       return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
@@ -61,7 +60,7 @@ window.marbles = (() => {
         };
 
         let answer = null;
-        const random = getRandomIntInclusive(1, ide.score[ide.current]);
+        const random = getRandomIntInclusive();
         if (ide.current === 1) {
           answer = prompt(`Сколько шариков из ${ide.score[1]} ты хочешь разыграть?`);
           console.log('bot, user: ', random, +answer);
@@ -72,12 +71,10 @@ window.marbles = (() => {
             alert(`Ошибка! Ты можешь разыграть ${ide.score[1]} шариков. Попробуйте еще раз`);
             return nextTurn();
           }
-          // проверка на четность
-          handleResult(+!(answer % 2), +!(random % 2), +answer);
+          handleResult(+!(answer % 2), +!!(random % 2), +answer);
         } else {
           answer = confirm(`Отгадайте: ${evenOdd.join(' или ')}?`);
           console.log('bot, user: ', random, +answer);
-          // проверка на четность
           handleResult(+answer, +!(random % 2), random);
         }
         hasExit();
@@ -86,8 +83,8 @@ window.marbles = (() => {
       const wantPlayAgain = () => {
         if (confirm(`Хотите сыграть еще?`)) {
           ide.resetScore();
-          // ide.current = +window.rpc()();
-          ide.current = +!ide.current;//удалить
+          ide.current = +window.rpc()();
+          ide.skipOneTurn = true;
         } else {
           ide.goExit = true;
         }
@@ -114,14 +111,26 @@ window.marbles = (() => {
         }
       };
       do {
+        switch (true) {
+          case ide.current < 0:
+            ide.current = +window.rpc()();
+            console.log('ide.score: ', ide.score);
+            break;
+          case ide.skipOneTurn:
+            ide.skipOneTurn = false;
+            break;
+          default:
+            ide.switchUser();
+            break;
+        }
         // if (ide.current < 0) {
         //   ide.current = +window.rpc()();
         //   console.log('ide.score: ', ide.score);
-        // } else {
+        // } else if (ide.skipOneTurn) {
+        //   ide.skipOneTurn = false;
+        // } else if (!ide.skipOneTurn) {
         //   ide.switchUser();
         // }
-        // nextTurn();
-        ide.current = 1;//удалить
         nextTurn();
       } while (!ide.goExit);
     };
